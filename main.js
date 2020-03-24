@@ -941,7 +941,8 @@ var MainMenuText = function (client){
     //        if (GetLang()){MenuText = MenuText + "\n4) Enroll"}
     //        else {MenuText = MenuText + "\n4) Enroll"}
     //    }
-    //}
+    //} 
+    
     if (IsPrePayTrialDistrict(client.DistrictName)){
         if (GetLang()){MenuText = MenuText + "\n5) Prepayment amount"}
         else {MenuText = MenuText + "\n5) Malipo ya kufuzu"}
@@ -979,6 +980,16 @@ var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
     }
     var BalanceInfo = "Balance: "+Balance+ "\nSeason: "+Season+ "\nCredit: "+Credit+ "\nPaid: "+Paid+ "\nOverpaid: "+Overpaid;
     call.vars.BalanceInfo = BalanceInfo;
+};
+
+var TrainingMenuText = function (){
+    if (GetLang()){sayText("1) Maize Intercrop")}
+    else {sayText("1) Maize Intercrop")}
+};
+
+var TrainingTriggeredText = function (){
+    if (GetLang()){sayText("Great! An SMS has been sent to your phone to begin the training.")}
+    else {sayText("Great! An SMS has been sent to your phone to begin the training.")}
 };
 
 var CallCenterMenuText = function (){
@@ -1553,26 +1564,30 @@ addInputHandler("MainMenu", function(MainMenu) {
         }
         promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
-    else if(MainMenu == 3 && IsGl(client.AccountNumber)&&IsJITTUDistrict(client.DistrictName)){
-            if (SiteLockVal (client.SiteName, client.DistrictName)){
-                JITTUSiteLockedText();
-                promptDigits("ViewJITOrder", {submitOnHash: true, maxDigits: 8, timeout: 5});
-            }
-        else{
-            JITTUAccNumText();
-             promptDigits("JITTUAccNum", {submitOnHash: true, maxDigits: 8, timeout: 5});
-        }
+    else if(MainMenu == 3){
+        TrainingMenuText();
+        promptDigits("TrainingSelect", {submitOnHash: true, maxDigits: 1, timeout: 5})
     }
-    else if(MainMenu == 4 && IsGl(client.AccountNumber)&&IsJITEDistrict(client.DistrictName)){
-        if (SiteLockVal (client.SiteName, client.DistrictName)){
-            JITESiteLockedText();
-            promptDigits("BackToMain", {submitOnHash: true, maxDigits: 8, timeout: 5});
-        }
-        else{
-            JITEAccNumText();
-            promptDigits("JITEAccNum", {submitOnHash: true, maxDigits: 8, timeout: 5});
-        }
-    }
+    //else if(MainMenu == 3 && IsGl(client.AccountNumber)&&IsJITTUDistrict(client.DistrictName)){
+      //      if (SiteLockVal (client.SiteName, client.DistrictName)){
+        //        JITTUSiteLockedText();
+          //      promptDigits("ViewJITOrder", {submitOnHash: true, maxDigits: 8, timeout: 5});
+            //}
+        //else{
+          //  JITTUAccNumText();
+           //  promptDigits("JITTUAccNum", {submitOnHash: true, maxDigits: 8, timeout: 5});
+        //}
+    //}
+   // else if(MainMenu == 4 && IsGl(client.AccountNumber)&&IsJITEDistrict(client.DistrictName)){
+     //   if (SiteLockVal (client.SiteName, client.DistrictName)){
+       //     JITESiteLockedText();
+         //   promptDigits("BackToMain", {submitOnHash: true, maxDigits: 8, timeout: 5});
+        //}
+        //else{
+         //   JITEAccNumText();
+          //  promptDigits("JITEAccNum", {submitOnHash: true, maxDigits: 8, timeout: 5});
+        //}
+    //}
     else if(MainMenu == 6 && FAWActive(client.DistrictName)&&EnrolledAndQualified(client)){
         var OrdersPlaced = FAWOrdersPlaced(client.AccountNumber);
         if (OrdersPlaced<FAWMaxOrders){
@@ -2902,3 +2917,17 @@ addInputHandler('CallCenterMenu', function(input) {
         promptDigits("CallCenterMenu", {submitOnHash: true, maxDigits: 1, timeout: 5})
     }
 })
+
+addInputHandler('TrainingSelect', function(input) {
+    LogSessionID();
+    var client = JSON.parse(state.vars.client);
+    InteractionCounter('TrainingSelect');
+    if (input == 1){
+        TriggerTraining("SVc03fa156b80cc6a4");
+        TrainingTriggeredText();
+    }
+    else{
+        TrainingMenuText();
+        promptDigits("TrainingSelect", {submitOnHash: true, maxDigits: 1, timeout: 5})
+    }
+});
