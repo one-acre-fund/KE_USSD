@@ -153,7 +153,6 @@ var ErrorEmail = function (Subject, Body){
     sendEmail("tom.vranken@oneacrefund.org", Subject, Body);
     sendEmail("rodgers.kweyuh@oneacrefund.org:", Subject, Body);
     sendEmail("charles.lipeyah@oneacrefund.org", Subject, Body);
-    sendEmail("Patrick.Biegon@oneacrefund.org", Subject, Body);
     sendEmail("rodrigo.zuolo@oneacrefund.org", Subject, Body);
     sendEmail("larkin.crain@oneacrefund.org", Subject, Body);
 };
@@ -172,6 +171,20 @@ var RosterColRequest = function (AccNum,Amount){
     call.vars.colreqTimeStamp = moment().format('X');
     return colResult.Success;
 };
+
+var TriggerTraining = function (ServiceID){
+    try{
+        var service = project.initServiceById(ServiceID);
+        service.invoke({
+            context: "contact", 
+            contact_id: contact.id
+        });
+    }
+    catch(err){
+        sendEmail("tom.vranken@oneacrefund.org", "URGENT - Service ID misconfiguration for aggr training", "Service ID: "+ ServiceID);
+    }
+};
+
 var LocationNotKnown = function (Location){
     if (Location == "#"|| Location == "0"){
         LocationNotKnownText();
