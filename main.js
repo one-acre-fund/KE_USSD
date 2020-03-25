@@ -1523,7 +1523,7 @@ addInputHandler("SplashMenu", function(SplashMenu) {
     }
     else if (SplashMenu == "0"){
         NonClientMenuText();
-        promptDigits("NonClientMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        promptDigits("NonClientMenu", {submitOnHash: true, maxDigits: 2, timeout: 5});
     }
     else if (SplashMenu == "9"){
         StaffPayrollText();
@@ -1552,7 +1552,7 @@ addInputHandler("NonClientMenu", function(input) {
     if (input == "99"){
         ChangeLang();
         NonClientMenuText();
-        promptDigits("NonClientMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        promptDigits("NonClientMenu", {submitOnHash: true, maxDigits: 2, timeout: 5});
     }
     else if (input== "1"){
         FOLocatorRegionText();
@@ -1564,7 +1564,7 @@ addInputHandler("NonClientMenu", function(input) {
     }
     else{
         NonClientMenuText();
-        promptDigits("NonClientMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        promptDigits("NonClientMenu", {submitOnHash: true, maxDigits: 2, timeout: 5});
     }
 })
 addInputHandler("MainMenu", function(MainMenu) {
