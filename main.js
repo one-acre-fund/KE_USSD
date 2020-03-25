@@ -2951,11 +2951,14 @@ addInputHandler('TrainingSelect', function(input) {
         var client = JSON.parse(state.vars.client);
         contact.vars.accountnumber = client.AccountNumber;
         contact.vars.client = state.vars.client;
+        contact.save();
 
     }
     catch(err){
         console.log("non client trigger");
         var client = "Non Client";
+        contact.vars.accountnumber = "Non Client";
+        contact.save();
     }   
     InteractionCounter('TrainingSelect');
     if (input == 1){
