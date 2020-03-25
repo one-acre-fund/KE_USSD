@@ -965,6 +965,12 @@ var MainMenuText = function (client){
     else {MenuText =MenuText + "\n99) English"}
     sayText(MenuText);
 };
+
+var NonClientMenuText = function (){
+    if (GetLang()){sayText("1) Find my One Acre Fund contact\n2) Training\n99) Swahili")}
+    else {sayText("1) Pata afisa wa One Acre Fund wa nyanjani\n2) Training\n99) English")}
+}
+
 var PaymentMenuText = function (AccNum){
     if (GetLang()){sayText("You are paying into account number "+AccNum+".\nPlease reply with the amount you want to pay")}
     else {sayText("Unafanya malipo kwa hii akaunti "+AccNum+".Tafadhali weka kiasi unachotaka kulipa")}
@@ -1516,8 +1522,8 @@ addInputHandler("SplashMenu", function(SplashMenu) {
         promptDigits("SplashMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
     }
     else if (SplashMenu == "0"){
-        FOLocatorRegionText();
-        promptDigits("FOLocRegion", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        NonClientMenuText();
+        promptDigits("NonClientMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if (SplashMenu == "9"){
         StaffPayrollText();
@@ -1540,6 +1546,27 @@ addInputHandler("SplashMenu", function(SplashMenu) {
         }
     }
 });
+addInputHandler("NonClientMenu", function(input) {
+    LogSessionID();
+    InteractionCounter("NonClientMenu");
+    if (input == "99"){
+        ChangeLang();
+        NonClientMenuText();
+        promptDigits("NonClientMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+    else if (input== "1"){
+        FOLocatorRegionText();
+        promptDigits("FOLocRegion", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+    else if (input == "2"){
+        TrainingMenuText();
+        promptDigits("TrainingSelect", {submitOnHash: true, maxDigits: 1, timeout: 5})
+    }
+    else{
+        NonClientMenuText();
+        promptDigits("NonClientMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+})
 addInputHandler("MainMenu", function(MainMenu) {
     LogSessionID();
     InteractionCounter("MainMenu");
@@ -2923,6 +2950,9 @@ addInputHandler('TrainingSelect', function(input) {
     var client = JSON.parse(state.vars.client);
     InteractionCounter('TrainingSelect');
     if (input == 1){
+        //var TrainingSelect =  RequestExperimentSelection(TrainingType,Client);
+        // if (TrainingSelect == 1 ){ ..}
+        // etc.
         TriggerTraining("SVc03fa156b80cc6a4");
         TrainingTriggeredText();
     }
