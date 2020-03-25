@@ -967,8 +967,8 @@ var MainMenuText = function (client){
 };
 
 var NonClientMenuText = function (){
-    if (GetLang()){sayText("1) Find my One Acre Fund contact\n2) Training\n99) Swahili")}
-    else {sayText("1) Pata afisa wa One Acre Fund wa nyanjani\n2) Training\n99) English")}
+    if (GetLang()){sayText("1) Find my One Acre Fund contact\n99) Swahili")}
+    else {sayText("1) Pata Afisa wa Nyanjani wa One Acre Fund\n99) English")}
 }
 
 var PaymentMenuText = function (AccNum){
