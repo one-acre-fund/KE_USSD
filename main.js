@@ -2949,9 +2949,13 @@ addInputHandler('TrainingSelect', function(input) {
     LogSessionID();
     try{
         var client = JSON.parse(state.vars.client);
+        contact.vars.accountnumber = client.AccountNumber;
+        contact.vars.client = state.vars.client;
+
     }
     catch(err){
-        console.log("non client trigger")
+        console.log("non client trigger");
+        var client = "Non Client";
     }   
     InteractionCounter('TrainingSelect');
     if (input == 1){
