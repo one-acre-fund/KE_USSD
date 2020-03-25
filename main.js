@@ -2947,7 +2947,12 @@ addInputHandler('CallCenterMenu', function(input) {
 
 addInputHandler('TrainingSelect', function(input) {
     LogSessionID();
-    var client = JSON.parse(state.vars.client);
+    try{
+        var client = JSON.parse(state.vars.client);
+    }
+    catch(err){
+        console.log("non client trigger")
+    }   
     InteractionCounter('TrainingSelect');
     if (input == 1){
         //var TrainingSelect =  RequestExperimentSelection(TrainingType,Client);
