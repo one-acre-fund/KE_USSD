@@ -990,13 +990,13 @@ var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
 };
 
 var TrainingMenuText = function (){
-    if (GetLang()){sayText("1) Maize Intercrop")}
-    else {sayText("1) Maize Intercrop")}
+    if (GetLang()){sayText("1) Maize Intercrop\n2) Maize Top Dress")}
+    else {sayText("1) Kupanda Mahindi na Maharagwe\n2) Kuweka CAN au Top Dress")}
 };
 
 var TrainingTriggeredText = function (){
-    if (GetLang()){sayText("Great! An SMS has been sent to your phone to begin the training.")}
-    else {sayText("Great! An SMS has been sent to your phone to begin the training.")}
+    if (GetLang()){sayText("A training SMS has been sent to your phone. Messages are free! But please delete unwanted SMS in your phone to make space for incoming.")}
+    else {sayText("Ujumbe wa mafunzo umetumwa kwa simu yako. Ujumbe yote ni bure! Kumbuka kufuta ujumbe usiyohitaji ili uwe na nafasi ya kupata ujumbe zaidi.")}
 };
 
 var CallCenterMenuText = function (){
@@ -2963,10 +2963,11 @@ addInputHandler('TrainingSelect', function(input) {
     }   
     InteractionCounter('TrainingSelect');
     if (input == 1){
-        //var TrainingSelect =  RequestExperimentSelection(TrainingType,Client);
-        // if (TrainingSelect == 1 ){ ..}
-        // etc.
         TriggerTraining("SVc03fa156b80cc6a4");
+        TrainingTriggeredText();
+    }
+    else if (input == 2){
+        TriggerTraining("SVffc2c4aa2be69ab5");
         TrainingTriggeredText();
     }
     else{
