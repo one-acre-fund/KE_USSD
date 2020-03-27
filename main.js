@@ -996,7 +996,7 @@ var TrainingMenuText = function (){
 
 var TrainingTriggeredText = function (){
     if (GetLang()){sayText("A training SMS has been sent to your phone. Messages are free! But please delete unwanted SMS in your phone to make space for incoming.")}
-    else {sayText("Ujumbe wa mafunzo umetumwa kwa simu yako. Ujumbe yote ni bure! Kumbuka kufuta ujumbe usiyohitaji ili uwe na nafasi ya kupata ujumbe zaidi.")}
+    else {sayText("Ujumbe wa mafunzo umetumwa kwa simu yako. Ujumbe wote ni bure! Kumbuka kufuta SMS usizohitaji ili uwe na nafasi ya kupata ujumbe zaidi.")}
 };
 
 var CallCenterMenuText = function (){
