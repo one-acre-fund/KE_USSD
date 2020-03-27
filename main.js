@@ -929,8 +929,8 @@ var SplashMenuFailure = function (){
 };
 var MainMenuText = function (client){
     var MenuText = "";
-    if (GetLang()){MenuText ="Select Service\n1) Make a payment\n2) Check balance"}
-    else {MenuText ="Chagua Huduma\n1) Fanya malipo\n2) Kuangalia salio"}
+    if (GetLang()){MenuText ="Select Service\n1) Make a payment\n2) Check balance\n3) Trainings"}
+    else {MenuText ="Chagua Huduma\n1) Fanya malipo\n2) Kuangalia salio\n3) Mafunzo"}
     var JITActive = true;
     var FAWActiveCheck = true;
     //if (IsGl(client.AccountNumber)){
@@ -968,8 +968,8 @@ var MainMenuText = function (client){
 };
 
 var NonClientMenuText = function (){
-    if (GetLang()){sayText("1) Find my One Acre Fund contact\n99) Swahili")}
-    else {sayText("1) Pata Afisa wa Nyanjani wa One Acre Fund\n99) English")}
+    if (GetLang()){sayText("1) Find my One Acre Fund contact\n2) Trainings\n99) Swahili")}
+    else {sayText("1) Pata Afisa wa Nyanjani wa One Acre Fund\n2) Mafunzo\n99) English")}
 }
 
 var PaymentMenuText = function (AccNum){
