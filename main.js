@@ -2911,6 +2911,7 @@ addInputHandler('StaffIssueLowlevel', function(input) {
 
 })
 
+//input handler for creating a call back request
 addInputHandler('CallCenterMenu', function(input) {
     LogSessionID();
     var client = JSON.parse(state.vars.client);
