@@ -2924,7 +2924,8 @@ addInputHandler('CallCenterMenu', function(input) {
     };
     if(input in menu_options){
         var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
-        if(create_zd_ticket(client.AccountNumber, menu_options[input], contact.phone_number)){
+        var sub = "Call back requested for: " + menu_options[input] +" account number : "+ client.AccountNumber;
+        if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
             console.log('created_ticket!');
         }
         else{
