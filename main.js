@@ -2915,36 +2915,27 @@ addInputHandler('CallCenterMenu', function(input) {
     LogSessionID();
     var client = JSON.parse(state.vars.client);
     InteractionCounter('CallCenterMenu');
-    if (input == 1){
-        CallBackCreate(client,contact.phone_number, "payment issue");
-        CallMeBackConfirmText();
-        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5})
-    }
-    else if (input == 2){
-        CallBackCreate(client,contact.phone_number, "solar registration/activation");
-        CallMeBackConfirmText(); 
-        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5})
-    }
-    else if (input == 3){
-        CallBackCreate(client,contact.phone_number, "Insurance Issue");
-        CallMeBackConfirmText();
-        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5})
-    }
-    else if (input == 4){
-        CallBackCreate(client,contact.phone_number, "Warranty Issue");
-        CallMeBackConfirmText();
-        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5})
-    }
-    else if (input == 5){
-        CallBackCreate(client,contact.phone_number, "general Issue");
-        CallMeBackConfirmText();
-        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5})
+    var menu_options = {
+        1 : 'Payment Issue',
+        2 : 'Solar Registration or Activation',
+        3 : 'Insurance Issue',
+        4 : 'Warranty Issue',
+        5 : 'General Issue'
+    };
+    if(input in menu_options){
+        var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
+        if(create_zd_ticket(client.AccountNumber, menu_options[input])){
+            console.log('created_ticket!');
+        }
+        else{
+            console.log('create_ticket failed on ' + client.AccountNumber);
+        }
     }
     else {
         CallCenterMenuText();
         promptDigits("CallCenterMenu", {submitOnHash: true, maxDigits: 1, timeout: 5})
     }
-})
+});
 
 addInputHandler('TrainingSelect', function(input) {
     LogSessionID();
