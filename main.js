@@ -2927,9 +2927,13 @@ addInputHandler('CallCenterMenu', function(input) {
         var sub = "Call back requested for: " + menu_options[input] +" account number : "+ client.AccountNumber;
         if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
             console.log('created_ticket!');
+            CallMeBackConfirmText();
+            hangUp();
         }
         else{
             console.log('create_ticket failed on ' + client.AccountNumber);
+            CallCenterMenuText();
+            promptDigits("CallCenterMenu", {submitOnHash: true, maxDigits: 1, timeout: 5})
         }
     }
     else {
