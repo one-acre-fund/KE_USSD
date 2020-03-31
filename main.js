@@ -1419,7 +1419,8 @@ var HospitalRegionText = function(){
 
 //Staff Menu
 var StaffMenuText = function(){
-    sayText("1) Report Unexpected Absence\n2)Report Tablet issue \n3) Site enrollment, site repayment and  delivery issues");
+    sayText("1) Report Unexpected Absence\n2)Report Tablet issue");
+    // sayText("1) Report Unexpected Absence\n2)Report Tablet issue \n3) Site enrollment, site repayment and  delivery issues");
 };
 var StaffPayrollText = function(){
     sayText("Please enter you 5 digit payroll ID");
@@ -2778,11 +2779,11 @@ addInputHandler('StaffMenu', function(input) {
         StaffTabletIssueText();
         promptDigits("StaffTabletIssue", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
-    else if (input == 3){
-        state.vars.MaxAnswer = 3;
-        StaffRosterIssueText();
-        promptDigits("StaffRosterIssue", {submitOnHash: true, maxDigits: 1, timeout: 5});
-    }
+    //else if (input == 3){
+      //  state.vars.MaxAnswer = 3;
+        //StaffRosterIssueText();
+        //promptDigits("StaffRosterIssue", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    //}
     else{
         StaffMenuText();
         promptDigits("StaffMenu", {submitOnHash: true, maxDigits: 1, timeout: 5}); 
