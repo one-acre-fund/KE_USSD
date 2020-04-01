@@ -841,6 +841,7 @@ var HospitalsRetrieve = function(townid){
     LocMenu = "" ;
     var LocTable = project.getOrCreateDataTable("Hospital_Hospitals");
     HospitalList = LocTable.queryRows({vars: {'townid': townid}});
+    HospitalList.limit(50);
     console.log(HospitalList.count());
     var HospitalArray = []; 
     while (HospitalList.hasNext()) {
