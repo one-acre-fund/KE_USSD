@@ -837,6 +837,26 @@ var ValidateHostitalInput = function(input){
     }
     return LocValid;
 };
+
+var LocationNext = function(){
+
+    for (var i = MenuCount; i < HospitalArray.length; i++) {
+        var MenuText = LocMenu + HospitalArray[i].Menu+ ") "+ HospitalArray[i].Name+'\n';
+        console.log(MenuText.length);
+        if(MenuText.length < 110){LocMenu = MenuText}
+        else{
+            MenuCount = i;
+            state.vars.MenuCount = i;
+            state.vars.MenuNext = true;
+            if (GetLang()){LocMenu = LocMenu+"0) Next"}
+            else {LocMenu= LocMenu+"0) Ukurasa Ufwatao"}
+            i = 9999;
+        }
+    }
+    return LocMenu;
+
+
+}
 var HospitalsRetrieve = function(townid){
     LocMenu = "" ;
     var LocTable = project.getOrCreateDataTable("Hospital_Hospitals");
