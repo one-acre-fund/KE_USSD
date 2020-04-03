@@ -2993,6 +2993,10 @@ addInputHandler('TrainingSelect', function(input) {
         TriggerTraining("SV647a6f30fad7625d");
         TrainingTriggeredText();
     }
+    else if (input == 4){
+        TriggerTraining("SV6d234d3094715099");
+        TrainingTriggeredText();
+    }
     else{
         TrainingMenuText();
         promptDigits("TrainingSelect", {submitOnHash: true, maxDigits: 1, timeout: 5})
