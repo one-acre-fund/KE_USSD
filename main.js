@@ -2686,6 +2686,7 @@ addInputHandler("CallBackPN", function(Input){
         promptDigits("MainMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if (Input =="1"){
+        
         CallBackCreate(client,contact.phone_number,state.vars.issuetype);
         CallMeBackConfirmText();
         promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
@@ -2966,6 +2967,10 @@ addInputHandler('TrainingSelect', function(input) {
     }
     else if (input == 2){
         TriggerTraining("SVffc2c4aa2be69ab5");
+        TrainingTriggeredText();
+    }
+    else if (input == 3){
+        TriggerTraining("SV647a6f30fad7625d");
         TrainingTriggeredText();
     }
     else{
