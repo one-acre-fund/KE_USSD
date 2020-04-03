@@ -1004,7 +1004,6 @@ var CallCenterMenuText = function (){
     if (GetLang()){sayText("1) Help on payment issues\n2) Help on solar activation\n3) Help on insurance issue\n4) Help on waranty issue\n5) General inquiry")}
     else {sayText("1) Usaidizi kuhusu fedha\n2) Usaidizi kuhusu sola\n3) Usaidizi wa bima/insurance\n4) Usaidizi wa dhamana/waranty\n5) Usaidizi wa kijumla")}
 };
-
 var PaymentSuccessText = function (){
     if (GetLang()){sayText("Please confirm the transaction by typing in your MPesa PIN in the pop up that will appear. Thank you")}
     else {sayText("Tafadhali thibitisha malipo yako kwa kubonyeza nambari yako ya siri ya Mpesa. Asante")}
@@ -1410,9 +1409,10 @@ var FOLocatorFOSMS = function(){
 };
 // INSURANCE
 var InsuranceMenuText = function(){
-    if (GetLang()){sayText("1) View NHIF Accredited Hospital\n9) Back to main")}
-    else {sayText("1) Angalia Hospitali yako iliyoidhinishwa na NHIF\n9) Rudi mwanzo wa menu")}
+    if (GetLang()){sayText("1) View NHIF Accredited Hospital\n2) Help on insurance issue\n9) Back to main")}
+    else {sayText("1) Angalia Hospitali yako iliyoidhinishwa na NHIF\n2) Usaidizi wa bima/insurance\n9) Rudi mwanzo wa menu")}
 }
+
 var HospitalRegionText = function(){
     if (GetLang()){sayText("Please choose your region:\n1) Central\n2) Coast\n3) Eastern\n4) Nairobi\n5) North Eastern\n6) Nyanza\n7) Rift Valley\n8) Western")}
     else {sayText("Tafadhali chagua mkoa wako:\n1) Central\n2) Coast\n3) Eastern\n4) Nairobi\n5) North Eastern\n6) Nyanza\n7) Rift Valley\n8) Western")}
@@ -2705,10 +2705,30 @@ addInputHandler('InsuranceMenu', function(input) {
         MainMenuText (client);
         promptDigits("MainMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
-    else {
+    else if (input == "1") {
         HospitalRegionText();
         promptDigits("HospitalRegion", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
+
+    else if(input == "2"){
+        var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
+        var sub = "Call back requested for: Insurance -  account number : "+ client.AccountNumber;
+        if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
+            console.log('created_ticket!');
+            CallMeBackConfirmText();
+            hangUp();
+        }
+        else{
+            console.log('create_ticket failed on ' + client.AccountNumber);
+            InsuranceMenuText();
+            promptDigits("InsuranceMenu", {submitOnHash: true, maxDigits: 1, timeout:5});
+        }
+    }
+    else{
+        InsuranceMenuText();
+        promptDigits("InsuranceMenu", {submitOnHash: true, maxDigits: 1, timeout:5});
+    }
+
 });
 addInputHandler('HospitalRegion', function(input) {
     LogSessionID();
