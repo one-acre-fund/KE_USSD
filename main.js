@@ -991,8 +991,8 @@ var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
 };
 
 var TrainingMenuText = function (){
-    if (GetLang()){sayText("1) Maize Intercrop\n2) Maize Top Dress")}
-    else {sayText("1) Kupanda Mahindi na Maharagwe\n2) Kuweka CAN au Top Dress")}
+    if (GetLang()){sayText("1) Maize Intercrop\n2) Maize Top Dress\n3) Tree bag planting\n4) Pest Mitigation Training")}
+    else {sayText("1) Kupanda Mahindi na Maharagwe\n2) Kuweka CAN au Top Dress\n3) Kupanda miti\n4) Masomo ya Wadudu na Magonjwa")}
 };
 
 var TrainingTriggeredText = function (){
