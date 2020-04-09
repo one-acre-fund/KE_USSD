@@ -1034,7 +1034,7 @@ var PrepaymentMenuText = function(prepayment, paid){
     }
 };
 var CallMeBackText = function(){
-    if (GetLang()){sayText("Please reply with the number you want to be called back on\n1) Use currect number\n9) Back to menu")}
+    if (GetLang()){sayText("Please reply with the number you want to be called back on\n1) Use current number\n9) Back to menu")}
     else {sayText("Tafadhali jibu kwa nambari ya simu utakayo pigiwa nayo.\n1) Kutumia nambari unayo tumia sasa\n9) Rudi hadi mwanzo")}
 };
 var CallMeBackConfirmText = function(){
@@ -2680,21 +2680,38 @@ addInputHandler("ReportIssueOrBackToMain", function(Input){
 addInputHandler("CallBackPN", function(Input){
     LogSessionID();
     InteractionCounter("CallBackPN");
+    var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
     var client = JSON.parse(state.vars.client);
     if (Input =="9"){
         MainMenuText (client);
         promptDigits("MainMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if (Input =="1"){
-        
-        CallBackCreate(client,contact.phone_number,state.vars.issuetype);
-        CallMeBackConfirmText();
-        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        var sub = "Call back requested for: " + state.vars.issuetype +" account number : "+ client.AccountNumber+ "With phonenumber: "+ contact.phone_number;
+        if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
+            console.log('created_ticket!');
+            CallMeBackConfirmText();
+            promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        }
+        else{
+            console.log('create_ticket failed on ' + client.AccountNumber);
+            CallMeBackText();
+            promptDigits("CallBackPN", {submitOnHash: true, maxDigits: 1, timeout: 5})
+        }
     }
     else {
-        CallBackCreate(client,Input,state.vars.issuetype);
-        CallMeBackConfirmText();
-        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
+
+        var sub = "Call back requested for: " + state.vars.issuetype +" account number : "+ client.AccountNumber+ "With phonenumber: "+  Input;
+        if(create_zd_ticket(client.AccountNumber, sub, Input)){
+            console.log('created_ticket!');
+            CallMeBackConfirmText();
+            promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        }
+        else{
+            console.log('create_ticket failed on ' + client.AccountNumber);
+            CallMeBackText();
+            promptDigits("CallBackPN", {submitOnHash: true, maxDigits: 1, timeout: 5})
+        }
     }
 });
 addInputHandler('InsuranceMenu', function(input) {
