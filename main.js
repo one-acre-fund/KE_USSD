@@ -740,6 +740,25 @@ var SHSShowCode = function(client,serial,type){
         }
     }
 };
+
+var CallBackTimeCheck = function(accountnumber, type, hours){
+    var ticketTable = project.getOrCreateDataTable("CallBackUSSD");
+    cursor = ticketTable.queryRows({
+        vars: {'account_number': accountnumber, 'call_category': type}
+    });
+    
+    cursor.limit(1);
+    if (cursor.hasNext()){
+        var row = cursor.next();
+        var now = moment().format('X');
+        var hoursBetween = (now - row.time_created)/60/60;
+        if (hoursBetween>hours){return false}
+        else { return true}
+    }
+    else{return false}
+
+};
+
 var CallBackCreate = function(client,phonenumberCB,type){
     //var CEEmail = "support@oneacrefund-ke.zendesk.com";
     //var Subject = "Call back requested for: "+type+" accountnumber :"+ client.AccountNumber;
@@ -3000,7 +3019,16 @@ addInputHandler('TrainingSelect', function(input) {
     }   
     InteractionCounter('TrainingSelect');
     if (input == 1){
-        TriggerTraining("SVc03fa156b80cc6a4");
+
+        var Random = Math.random();
+        console.log(Random)
+        
+        if (Random > 0.25){
+            console.log("triggered default");
+            TriggerTraining("SVc03fa156b80cc6a4");
+        }
+        else {TriggerTraining("SV672cd762c6389124")} 
+    
         TrainingTriggeredText();
     }
     else if (input == 2){
