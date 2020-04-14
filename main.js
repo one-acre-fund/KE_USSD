@@ -1010,8 +1010,8 @@ var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
 };
 
 var TrainingMenuText = function (){
-    if (GetLang()){sayText("1) Maize Intercrop\n2) Maize Top Dress\n3) Tree bag planting\n4) Pest Mitigation Training")}
-    else {sayText("1) Kupanda Mahindi na Maharagwe\n2) Kuweka CAN au Top Dress\n3) Kupanda miti\n4) Masomo ya Wadudu na Magonjwa")}
+    if (GetLang()){sayText("1) Maize Intercrop\n2) Maize Top Dress\n3) Tree bag planting\n4) Pest Mitigation Training\n5) Tree Socketing")}
+    else {sayText("1) Kupanda Mahindi na Maharagwe\n2) Kuweka CAN au Top Dress\n3) Kupanda miti\n4) Masomo ya Wadudu na Magonjwa\n5) Mafunzo ya Socketing ya Miti")}
 };
 
 var TrainingTriggeredText = function (){
@@ -1060,6 +1060,12 @@ var CallMeBackConfirmText = function(){
     if (GetLang()){sayText("You will contacted by our customer service representative within 48 hours. Do not switch off  this phone or place a duplicate request.")}
     else {sayText("Utapokea simu kutoka kwa mhudumu wa one Acre Fund kwa muda wa masaa 48. Usizime simu hii wala kuwasilisha ombi zaidi ya mara moja.")}
 };
+
+var CallMeBackDuplicateText = function(){
+    if (GetLang()){sayText("You have already placed a similar request. We assure you that you will be contacted. Please be available. Thank you for the patience.")}
+    else {sayText("Tulipokea ombi hili hapo awali. Tunakuhakikishia kwamba utapokea mawasiliano. Tafadhali usizime simu. Asante kwa kusubiri.")}
+};
+
 var LoanNotRepaidText = function(season){
     if (GetLang()){sayText("your loan for "+season+" is not fully repaid\n1) Back to menu")}
     else {sayText("your loan for "+season+" is not fully repaid\n1) Back to menu")}
@@ -2982,18 +2988,28 @@ addInputHandler('CallCenterMenu', function(input) {
         5 : 'General Issue'
     };
     if(input in menu_options){
-        var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
         var sub = "Call back requested for: " + menu_options[input] +" account number : "+ client.AccountNumber;
-        if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
-            console.log('created_ticket!');
-            CallMeBackConfirmText();
+        
+        if(CallBackTimeCheck(client.AccountNumber, sub, 48)){
+            var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
+        
+            if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
+                console.log('created_ticket!');
+                CallMeBackConfirmText();
+                hangUp();
+            }
+            else{
+                console.log('create_ticket failed on ' + client.AccountNumber);
+                CallCenterMenuText();
+                promptDigits("CallCenterMenu", {submitOnHash: true, maxDigits: 1, timeout: 5})
+            }
+        }
+        else {
+            CallMeBackDuplicateText();
             hangUp();
         }
-        else{
-            console.log('create_ticket failed on ' + client.AccountNumber);
-            CallCenterMenuText();
-            promptDigits("CallCenterMenu", {submitOnHash: true, maxDigits: 1, timeout: 5})
-        }
+
+
     }
     else {
         CallCenterMenuText();
@@ -3040,6 +3056,10 @@ addInputHandler('TrainingSelect', function(input) {
     }
     else if (input == 4){
         TriggerTraining("SV6d234d3094715099");
+        TrainingTriggeredText();
+    }
+    else if (input == 5){
+        TriggerTraining("SV8419e6228a23cec2");
         TrainingTriggeredText();
     }
     else{
