@@ -2991,6 +2991,10 @@ addInputHandler('CallCenterMenu', function(input) {
         var sub = "Call back requested for: " + menu_options[input] +" account number : "+ client.AccountNumber;
         
         if(CallBackTimeCheck(client.AccountNumber, sub, 48)){
+            CallMeBackDuplicateText();
+            hangUp();
+        }
+        else{
             var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
         
             if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
@@ -3004,12 +3008,6 @@ addInputHandler('CallCenterMenu', function(input) {
                 promptDigits("CallCenterMenu", {submitOnHash: true, maxDigits: 1, timeout: 5})
             }
         }
-        else {
-            CallMeBackDuplicateText();
-            hangUp();
-        }
-
-
     }
     else {
         CallCenterMenuText();
