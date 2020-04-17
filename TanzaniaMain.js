@@ -111,11 +111,15 @@ var SplashMenuFailure = function (){
 };
 
 var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
-    if(Overpaid){sayText(Season+":\nJumla ya malipo: "+Paid+"\nJumla ya mkopo: "+Credit+"\nMalipo kwa mkopo unaofuata: "+Balance+ "\n9) Back to menu")}
-    else {sayText(Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance+ "\n9) Back to menu")}
-    var BalanceInfo = "Balance: "+Balance+ "\nSeason: "+Season+ "\nCredit: "+Credit+ "\nPaid: "+Paid+ "\nOverpaid: "+Overpaid;
+    if(Overpaid){BalanceInfo = Season+":\nJumla ya malipo: "+Paid+"\nJumla ya mkopo: "+Credit+"\nMalipo kwa mkopo unaofuata: "+Balance+ "\n1) Send to me via SMS\n9) Back to menu"}
+    else {BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance+ "\n1) Send to me via SMS\n9) Back to menu"}
+   sayText(BalanceInfo);
     call.vars.BalanceInfo = BalanceInfo;
 };
+
+var BalanceSMSConfirmText = function(){
+    sayText("Thank you we have Send you an SMS with your balance\n9) back to main")
+}
 var PaymentInstrucMNOSelectText = function (){
     sayText("OAF Supports the following providers:\n1) Vodacom\n2) Halotel\n3) FrancisTell\n9) Back to Menu")
 };
@@ -141,6 +145,7 @@ var CallBackCatSelectText = function(){
 var CallBackConfirmText = function(){
     sayText("Thank you we have recorded your request, you will receive a call from our agent within the next 2 business days\n9) back to main")
 }
+
 
 
 // start logic flow
