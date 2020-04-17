@@ -968,7 +968,7 @@ var MainMenuText = function (client){
         if (GetLang()){MenuText = MenuText + "\n5) Prepayment amount"}
         else {MenuText = MenuText + "\n5) Malipo ya kufuzu"}
     }
-    if (FAWActive(client.DistrictName)&&EnrolledAndQualified(client)){
+    if (EnrolledAndQualified(client)){
         if (GetLang()){MenuText = MenuText + "\n6) FAW Pesticide Order"}
         else {MenuText = MenuText + "\n6) Kuagiza dawa ya FAW"}
     }
@@ -1145,6 +1145,11 @@ var FAWMaxOrderText = function(numberordered){
 
     
 };
+var FAWInactiveText = function(){
+    if (GetLang()){sayText("Orders for Radiant are currently closed. You can buy the pesticide from your agrovet. Remember to use a different pesticide each season")}
+    else {sayText("Kuagiza kwa Radiant kumefungwa kwa sasa. Unaweza kununua dawa hii kutoka kwa duka la ukulima. Kumbuka kutumia dawa tofauti kila msimu")}
+};
+
 var FAWOrderText = function(remainorders, alreadyordered){
     console.log("allowed to cancel: "+state.vars.FAWAllowcancel);
     var FAWOrderText = "";
@@ -1643,20 +1648,26 @@ addInputHandler("MainMenu", function(MainMenu) {
           //  promptDigits("JITEAccNum", {submitOnHash: true, maxDigits: 8, timeout: 5});
         //}
     //}
-    else if(MainMenu == 6 && FAWActive(client.DistrictName)&&EnrolledAndQualified(client)){
-        var OrdersPlaced = FAWOrdersPlaced(client.AccountNumber);
-        if (OrdersPlaced<FAWMaxOrders){
-            var RemainOrders = FAWMaxOrders - OrdersPlaced;
-            state.vars.FAWRemaining = RemainOrders;
-            FAWOrderText(RemainOrders, OrdersPlaced);
-            promptDigits("FAWOrder", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    else if(MainMenu == 6){
+        if( FAWActive(client.DistrictName)&&EnrolledAndQualified(client)){
+            var OrdersPlaced = FAWOrdersPlaced(client.AccountNumber);
+            if (OrdersPlaced<FAWMaxOrders){
+                var RemainOrders = FAWMaxOrders - OrdersPlaced;
+                state.vars.FAWRemaining = RemainOrders;
+                FAWOrderText(RemainOrders, OrdersPlaced);
+                promptDigits("FAWOrder", {submitOnHash: true, maxDigits: 1, timeout: 5});
+            }
+            else {
+                FAWMaxOrderText(OrdersPlaced);
+                if (state.vars.FAWAllowcancel){
+                    promptDigits("FAWCancel", {submitOnHash: true, maxDigits: 1, timeout: 5});
+                }
+                else{promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5})}
+            }
         }
         else {
-            FAWMaxOrderText(OrdersPlaced);
-            if (state.vars.FAWAllowcancel){
-                promptDigits("FAWCancel", {submitOnHash: true, maxDigits: 1, timeout: 5});
-            }
-            else{promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5})}
+            FAWInactiveText();
+            promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5})
         }
     }
     else if(MainMenu == 7 && SHSActive(client.DistrictName) ){
