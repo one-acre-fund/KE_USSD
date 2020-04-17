@@ -181,7 +181,7 @@ addInputHandler("MainMenu", function(MainMenu) {
     client = JSON.parse(state.vars.client);
     if (MainMenu == 1){
         DisplayBalance(client);
-        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        promptDigits("BalanceContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if (MainMenu == 2){
         PaymentInstrucMNOSelectText();
@@ -260,5 +260,26 @@ addInputHandler("CatSelect", function(input) {
     else{
         CallBackCatSelectText();
         promptDigits("CatSelect", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+})
+
+// BalanceContinue
+
+addInputHandler("BalanceContinue", function(input) {
+    LogSessionID();
+    InteractionCounter("BalanceContinue");
+    var client = JSON.parse(state.vars.client);
+    if (input == 1){
+        SendPushSMStoContact(call.vars.BalanceInfo, "BalanceInfo");
+        BalanceSMSConfirmText();
+        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+    else if (input == 9){
+        MainMenuText (client);
+        promptDigits("MainMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+    else{
+        DisplayBalance();
+        promptDigits("BalanceContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
 })
