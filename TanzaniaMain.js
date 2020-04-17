@@ -2,6 +2,10 @@
 var rosterAPI = require('ext/Roster_v1_2_0/api');
 var RouteIDPush = "PNd735c47103a6304e";
 
+var LogSessionID = function(){
+    console.log("Unique session id: "+call.id);
+};
+
 var InteractionCounter = function(input){
     try{
         if (typeof(state.vars.InteractionCount) == 'undefined') {state.vars.InteractionCount = 1}
