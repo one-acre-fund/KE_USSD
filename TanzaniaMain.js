@@ -6,6 +6,12 @@ var LogSessionID = function(){
     console.log("Unique session id: "+call.id);
 };
 
+var TrimClientJSON = function(client){
+    var SeasonCount = client.BalanceHistory.length;
+    if (SeasonCount>3){client.BalanceHistory.length = 3}
+    return client;
+};
+
 var InteractionCounter = function(input){
     try{
         if (typeof(state.vars.InteractionCount) == 'undefined') {state.vars.InteractionCount = 1}
