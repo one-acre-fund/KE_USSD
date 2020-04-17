@@ -98,7 +98,10 @@ var SplashMenuText = function (){
     sayText("Karibu kwenye huduma ya One Acre Fund. Tafadhali bonyenza nambari zako 8 za akaunti. \n0) How to call the call centre")
 };
 var CallCentreInfoText = function (){
-    sayText("You can contact our call centre for free on 1234567890\n9) Back to menu")
+    sayText("You can contact our call centre for free on 1234567890. Our business hours are xxx")
+};
+var CallCentreInfoPlusBackText = function (){
+    sayText("You can contact our call centre for free on 1234567890. Our business hours are xxx\n9) Back to menu")
 };
 var MainMenuText = function (client){
     sayText("Select Service\n1) Check balance\n2) How to make a payment\n3) Report issue\n4) Call centre details")
@@ -189,7 +192,7 @@ addInputHandler("MainMenu", function(MainMenu) {
         promptDigits("CatSelect", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if (MainMenu == 4){
-        CallCentreInfoText();
+        CallCentreInfoPlusBackText();
         promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else {
