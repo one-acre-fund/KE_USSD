@@ -111,9 +111,9 @@ var SplashMenuFailure = function (){
 };
 
 var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
-    if(Overpaid){BalanceInfo = Season+":\nJumla ya malipo: "+Paid+"\nJumla ya mkopo: "+Credit+"\nMalipo kwa mkopo unaofuata: "+Balance+ "\n1) Send to me via SMS\n9) Back to menu"}
-    else {BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance+ "\n1) Send to me via SMS\n9) Back to menu"}
-   sayText(BalanceInfo);
+    if(Overpaid){BalanceInfo = Season+":\nJumla ya malipo: "+Paid+"\nJumla ya mkopo: "+Credit+"\nMalipo kwa mkopo unaofuata: "+Balance}
+    else {BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance}
+   sayText(BalanceInfo+  "\n1) Send to me via SMS\n9) Back to menu");
     call.vars.BalanceInfo = BalanceInfo;
 };
 
