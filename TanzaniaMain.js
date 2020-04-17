@@ -248,5 +248,4 @@ addInputHandler("CatSelect", function(input) {
         CallBackCatSelectText();
         promptDigits("CatSelect", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
-
-\
+})
