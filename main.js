@@ -164,6 +164,7 @@ var ErrorEmail = function (Subject, Body){
     sendEmail("charles.lipeyah@oneacrefund.org", Subject, Body);
     sendEmail("rodrigo.zuolo@oneacrefund.org", Subject, Body);
     sendEmail("larkin.crain@oneacrefund.org", Subject, Body);
+    sendEmail("marisa.bhargava@oneacrefund.org", Subject, Body);
 };
 var RosterColRequest = function (AccNum,Amount){
     rosterAPI.verbose = true;
