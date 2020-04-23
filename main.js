@@ -1450,8 +1450,8 @@ var FOLocatorFOSMS = function(){
 };
 // INSURANCE
 var InsuranceMenuText = function(){
-    if (GetLang()){sayText("1) View NHIF Accredited Hospital\n2) Help on insurance issue\n9) Back to main")}
-    else {sayText("1) Angalia Hospitali yako iliyoidhinishwa na NHIF\n2) Usaidizi wa bima/insurance\n9) Rudi mwanzo wa menu")}
+    if (GetLang()){sayText("1) View NHIF Accredited Hospital\n9) Back to main")}
+    else {sayText("1) Angalia Hospitali yako iliyoidhinishwa na NHIF\n9) Rudi mwanzo wa menu")}
 }
 
 var HospitalRegionText = function(){
@@ -2774,20 +2774,6 @@ addInputHandler('InsuranceMenu', function(input) {
         promptDigits("HospitalRegion", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
 
-    else if(input == "2"){
-        var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
-        var sub = "Call back requested for: Insurance -  account number : "+ client.AccountNumber;
-        if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
-            console.log('created_ticket!');
-            CallMeBackConfirmText();
-            hangUp();
-        }
-        else{
-            console.log('create_ticket failed on ' + client.AccountNumber);
-            InsuranceMenuText();
-            promptDigits("InsuranceMenu", {submitOnHash: true, maxDigits: 1, timeout:5});
-        }
-    }
     else{
         InsuranceMenuText();
         promptDigits("InsuranceMenu", {submitOnHash: true, maxDigits: 1, timeout:5});
