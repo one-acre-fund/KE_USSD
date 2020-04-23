@@ -1004,8 +1004,8 @@ var NonClientMenuText = function (){
 var PaymentMenuText = function (client){
     var repaid = GetRepaid (client, client.BalanceHistory[0].SeasonName)
     var balance = GetBalance(client, client.BalanceHistory[0].SeasonName)
-    if (GetLang()){sayText("You are paying into account number "+client.accountnumber+" Total Repaid "+repaid+", Bal "+balance+".Please reply with the amount you want to pay")}
-    else {sayText("Unafanya malipo kwa hii akaunti "+client.accountnumber+" Jumla ya malipo "+repaid+", Salio "+balance+".Tafadhali weka kiasi unachotaka kulipa")}
+    if (GetLang()){sayText("You are paying into account number "+client.AccountNumber+" Total Repaid "+repaid+", Bal "+balance+".Please reply with the amount you want to pay")}
+    else {sayText("Unafanya malipo kwa hii akaunti "+client.AccountNumber+" Jumla ya malipo "+repaid+", Salio "+balance+".Tafadhali weka kiasi unachotaka kulipa")}
 };
 var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
     if (GetLang()){
