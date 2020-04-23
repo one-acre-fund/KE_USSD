@@ -90,7 +90,16 @@ var GetBalance = function (client, season){
     var arrayLength = client.BalanceHistory.length;
     for (var i = 0; i < arrayLength; i++) {
         if (client.BalanceHistory[i].SeasonName ==season){balance = client.BalanceHistory[i].Balance}}
+    return balance    
 };
+var GetRepaid = function (client, season){
+    var repaid = 0;
+    var arrayLength = client.BalanceHistory.length;
+    for (var i = 0; i < arrayLength; i++) {
+        if (client.BalanceHistory[i].SeasonName ==season){repaid = client.BalanceHistory[i].TotalRepayment_IncludingOverpayments}}
+    return repaid
+};
+
 var ValidPN = function(phonenumber){
     if (phonenumber.length === 10 && phonenumber.substring(0, 2)=="07"){return true}
     else {return false}
@@ -992,9 +1001,11 @@ var NonClientMenuText = function (){
     else {sayText("1) Pata Afisa wa Nyanjani wa One Acre Fund\n2) Mafunzo\n99) English")}
 }
 
-var PaymentMenuText = function (AccNum){
-    if (GetLang()){sayText("You are paying into account number "+AccNum+".\nPlease reply with the amount you want to pay")}
-    else {sayText("Unafanya malipo kwa hii akaunti "+AccNum+".Tafadhali weka kiasi unachotaka kulipa")}
+var PaymentMenuText = function (client){
+    var repaid = GetRepaid (client, client.BalanceHistory[0].SeasonName)
+    var balance = GetBalance(client, client.BalanceHistory[0].SeasonName)
+    if (GetLang()){sayText("You are paying into account number "+client.AccountNumber+" Total Repaid "+repaid+", Bal "+balance+".Please reply with the amount you want to pay")}
+    else {sayText("Unafanya malipo kwa hii akaunti "+client.AccountNumber+" Jumla ya malipo "+repaid+", Salio "+balance+".Tafadhali weka kiasi unachotaka kulipa")}
 };
 var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
     if (GetLang()){
@@ -1611,7 +1622,7 @@ addInputHandler("MainMenu", function(MainMenu) {
     }
     else if (MainMenu == 1){
         client = JSON.parse(state.vars.client);
-        PaymentMenuText (client.AccountNumber);
+        PaymentMenuText (client);
         promptDigits("PaymentAmount", {submitOnHash: true, maxDigits: 5, timeout: 5});
     }
     else if(MainMenu == 5 &&  IsPrePayTrialDistrict(client.DistrictName)){
@@ -1725,7 +1736,7 @@ addInputHandler("ContinueToPayment", function(ContinueToPayment) {
     LogSessionID();
     InteractionCounter("ContinueToPayment");
     client = JSON.parse(state.vars.client);
-    PaymentMenuText (client.AccountNumber);
+    PaymentMenuText (client);
     promptDigits("PaymentAmount", {submitOnHash: true, maxDigits: 5, timeout: 5});
     
 });
