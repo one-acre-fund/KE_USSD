@@ -3073,6 +3073,10 @@ addInputHandler('TrainingSelect', function(input) {
         TriggerTraining("SV7aa1486d6be8ae59");
         TrainingTriggeredText();
     }
+    else if (input == 7){
+        TriggerTraining("SV87c0c32ff5e3ebaa");
+        TrainingTriggeredText();
+    }
     else{
         TrainingMenuText();
         promptDigits("TrainingSelect", {submitOnHash: true, maxDigits: 1, timeout: 5})
