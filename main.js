@@ -1022,8 +1022,8 @@ var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
 };
 
 var TrainingMenuText = function (){
-    if (GetLang()){sayText("1) Maize Intercrop\n2) Maize Top Dress\n3) Tree bag planting\n4) Pest Mitigation Training\n5) Tree Socketing")}
-    else {sayText("1) Kupanda Mahindi na Maharagwe\n2) Kuweka CAN au Top Dress\n3) Kupanda miti\n4) Masomo ya Wadudu na Magonjwa\n5) Mafunzo ya Socketing ya Miti")}
+    if (GetLang()){sayText("1.Maize Intercrop\n2.Maize Top Dress\n3.Tree bag planting\n4.Pest Mitigation\n5.Tree Socketing\n6.Sorghum Weeding\n7.Tree Transplanting")}
+    else {sayText("1.Kupanda Mahindi na Maharagwe\n2.Top Dress\n3. Kupanda miti\n4. Wadudu na Magonjwa\n5. Socketing ya Miti\n6. Kupalilia Wimbi\n7. Kupanda Miti")}
 };
 
 var TrainingTriggeredText = function (){
@@ -3073,6 +3073,10 @@ addInputHandler('TrainingSelect', function(input) {
     }
     else if (input == 6){
         TriggerTraining("SV7aa1486d6be8ae59");
+        TrainingTriggeredText();
+    }
+    else if (input == 7){
+        TriggerTraining("SV87c0c32ff5e3ebaa");
         TrainingTriggeredText();
     }
     else{
