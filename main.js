@@ -1579,6 +1579,7 @@ addInputHandler("SplashMenu", function(SplashMenu) {
             console.log("SuccessFully Validated against Roster");
             client = RosterClientGet(ClientAccNum);
             state.vars.client = JSON.stringify(TrimClientJSON(client));
+            call.vars.client = JSON.stringify(TrimClientJSON(client));
             call.vars.AccNum = ClientAccNum;
             MainMenuText (client);
             promptDigits("MainMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
@@ -3066,6 +3067,10 @@ addInputHandler('TrainingSelect', function(input) {
     }
     else if (input == 5){
         TriggerTraining("SV8419e6228a23cec2");
+        TrainingTriggeredText();
+    }
+    else if (input == 6){
+        TriggerTraining("SV7aa1486d6be8ae59");
         TrainingTriggeredText();
     }
     else{
