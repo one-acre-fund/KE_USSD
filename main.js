@@ -1580,6 +1580,8 @@ addInputHandler("SplashMenu", function(SplashMenu) {
             client = RosterClientGet(ClientAccNum);
             state.vars.client = JSON.stringify(TrimClientJSON(client));
             call.vars.client = JSON.stringify(TrimClientJSON(client));
+            contact.vars.client =  JSON.stringify(TrimClientJSON(client));
+            contact.save();
             call.vars.AccNum = ClientAccNum;
             MainMenuText (client);
             promptDigits("MainMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
