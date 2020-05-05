@@ -146,8 +146,6 @@ var CallBackConfirmText = function(){
     sayText("Thank you we have recorded your request, you will receive a call from our agent within the next 2 business days\n9) back to main")
 }
 
-
-
 // start logic flow
 
 global.main = function () {
@@ -168,6 +166,7 @@ addInputHandler("SplashMenu", function(SplashMenu) {
             console.log("SuccessFully Validated against Roster");
             client = RosterClientGet(ClientAccNum);
             state.vars.client = JSON.stringify(TrimClientJSON(client));
+            call.vars.client = JSON.stringify(TrimClientJSON(client));
             call.vars.AccNum = ClientAccNum;
             MainMenuText (client);
             promptDigits("MainMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
