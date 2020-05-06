@@ -1133,13 +1133,15 @@ var SHSCodeSMS = function(shscode){
     var SMSText = "";
     if (GetLang()) {SMSText = "Your solar code is: "+shscode}
     else {SMSText = "Kodi ya taa yako ni: "+shscode}
-    var Label = project.getOrCreateLabel("SHS Code SMS");
-    var sent_msg = project.sendMessage({
-        content:  SMSText ,
-        to_number:contact.phone_number,
-        route_id: RouteIDPush,
-        label_ids : [Label.id]
-    });    
+
+    var sent_msg = project.scheduleMessage({
+        message_type: "service", 
+        to_number: contact.phone_number, 
+        start_time_offset: 0,
+        service_id: "SV44cdffa755e06381",
+        vars: {content: SMStext}
+    });
+  
 };
 // FAW
 var FAWMaxOrderText = function(numberordered){
@@ -1208,15 +1210,14 @@ var FAWSuccessSMS = function(order){
     var SMStext = "Asante kwa kuagiza chupa "+ order+ ". Mwalimu wako atakuletea dawa zako kwa wiki chache zijazo. Kiasi cha KSH "+Credit+" kitaongezwa kwa mkopo wako.";
     if (GetLang()){SMStext = "Thanks for ordering "+ order+ " bottles. Your FO will deliver the pesticide within a few weeks. An amount of "+Credit+" KSH will be added to your credit."}
     var Label = project.getOrCreateLabel("FAW Order Confirm");
-
-    var sent_msg = project.sendMessage({
-        content:  SMStext ,
-        to_number:contact.phone_number,
-        route_id: RouteIDPush,
-        label_ids : [Label.id]
+      // Please use scheduled message function for PUSH SMSes from the USSD service to make sure that the traffic pops up in the dashboard here: https://telerivet.com/p/0c6396c9/message_stats?cumulative=false&field=count&rollup=day&groups=main.series.service%2Cmain.series.type%2Cmain.series.direction&start_date=6.4.2020&end_date=6.5.2020 This is used for budgetting
+    var sent_msg = project.scheduleMessage({
+        message_type: "service", 
+        to_number: contact.phone_number, 
+        start_time_offset: 0,
+        service_id: "SV6033c380e37b7d11",
+        vars: {content: SMStext}
     });
-
-
 
 };
 // JIT TU
@@ -1271,12 +1272,15 @@ var JITTUOrderOverviewSMS= function(orderoverview, accountnumber, phonenumber){
             }
         }
     var Label = project.getOrCreateLabel("JIT-TU OrderOverview");
-    var sent_msg = project.sendMessage({
-        content:  OrderOverviewText ,
-        to_number: phonenumber,
-        route_id: RouteIDPush,
-        label_ids : [Label.id]
-    });    
+  // Please use scheduled message function for PUSH SMSes from the USSD service to make sure that the traffic pops up in the dashboard here: https://telerivet.com/p/0c6396c9/message_stats?cumulative=false&field=count&rollup=day&groups=main.series.service%2Cmain.series.type%2Cmain.series.direction&start_date=6.4.2020&end_date=6.5.2020 This is used for budgetting
+    var scheduled_msg = project.scheduleMessage({
+        message_type: "service", 
+        to_number: phonenumber, 
+        start_time_offset: 0,
+        service_id: "SVd95696157d97757d",
+        vars: {content: OrderOverviewText}
+    });
+
     return OrderOverviewText;
 };
 var JITTUShowOrdersText = function(orderoverview){
@@ -1393,12 +1397,15 @@ var JITEOrderConfrimSMS = function(phonenumber, bundlename,variety){
     if (GetLang()){SMSText="Thanks for ordering "+bundlename+ " of seed type "+ variety+". Make sure you pay KSH 500 qualification amount to receive input on input delivery day."}
     else {SMSText="Asante kwa kujisajili na "+bundlename+ " na "+ variety+". Hakikisha umelipa shilingi 500 ilikupokea bidhaa siku yakupokea pembejeo."}
     var Label = project.getOrCreateLabel("JIT-E confirm");
-    var sent_msg = project.sendMessage({
-        content:  SMSText,
-        to_number: phonenumber,
-        route_id: RouteIDPush,
-        label_ids : [Label.id]
+    // Please use scheduled message function for PUSH SMSes from the USSD service to make sure that the traffic pops up in the dashboard here: https://telerivet.com/p/0c6396c9/message_stats?cumulative=false&field=count&rollup=day&groups=main.series.service%2Cmain.series.type%2Cmain.series.direction&start_date=6.4.2020&end_date=6.5.2020 This is used for budgetting
+    var scheduled_msg = project.scheduleMessage({
+        message_type: "service", 
+        to_number: phonenumber, 
+        start_time_offset: 0,
+        service_id: "SVd95696157d97757d",
+        vars: {content: SMSText}
     });
+    
 };
 var JITEOrdeCloseText = function(){
     if (GetLang()){sayText("Thanks for enrolling with One Acre Fund through Just in Time.")}
@@ -2056,20 +2063,25 @@ addInputHandler("FOLocConfrim", function(Confirm) {
     InteractionCounter("FOLocConfrim");
     if (Confirm == "1"){
         var FOLocatorLabel = project.getOrCreateLabel("FO Locator");
+        // Please use scheduled message function for PUSH SMSes from the USSD service to make sure that the traffic pops up in the dashboard here: https://telerivet.com/p/0c6396c9/message_stats?cumulative=false&field=count&rollup=day&groups=main.series.service%2Cmain.series.type%2Cmain.series.direction&start_date=6.4.2020&end_date=6.5.2020 This is used for budgetting
         var FarmerSMSContent = FOLocatorFarmerSMS();
+        var sent_msg_farmer = project.scheduleMessage({
+            message_type: "service", 
+            to_number: contact.phone_number, 
+            start_time_offset: 0,
+            service_id: "SVc758c8b7ad90dd27",
+            vars: {content: FarmerSMSContent}
+        });
+
         var FOSMSContent = FOLocatorFOSMS();
-        var sent_msg_farmer = project.sendMessage({
-            content:  FarmerSMSContent,
-            to_number: contact.phone_number,
-            route_id: RouteIDPush,
-            label_ids : [FOLocatorLabel.id]
+        var sent_msg_fo = project.scheduleMessage({
+            message_type: "service", 
+            to_number: state.vars.FOPN, 
+            start_time_offset: 0,
+            service_id: "SVc758c8b7ad90dd27",
+            vars: {content: FOSMSContent}
         });
-        var sent_msg_fo = project.sendMessage({
-            content:  FOSMSContent,
-            to_number:state.vars.FOPN ,
-            route_id: RouteIDPush,
-            label_ids : [FOLocatorLabel.id]
-        });
+
         var ProspectTable = project.getOrCreateDataTable("FO_Locator_Prospects");
         var ProspectRow = ProspectTable.createRow({
             vars: {
