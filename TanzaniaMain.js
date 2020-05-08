@@ -72,9 +72,10 @@ var DisplayBalance = function(client){
 
 var GetHeathyPathPercent = function (Season,RegionName){
     var table = project.getOrCreateDataTable("HealthyPath");
-    var weekstart = "";
+    var weeknumber = moment().week();
+    console.log("Current week number = "+weeknumber);
     cursorRegion = table.queryRows({
-        vars: {'regionname': RegionName, 'seasonname': Season, 'weekstart':weekstart}
+        vars: {'regionname': RegionName, 'seasonname': Season, 'weeknumber':weeknumber}
     });
     cursorRegion.limit(1);
     if (cursorRegion.hasNext()){
