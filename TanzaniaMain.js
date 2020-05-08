@@ -64,7 +64,8 @@ var DisplayBalance = function(client){
         var Credit = client.BalanceHistory[i].TotalCredit;
         var RegionName = client.RegionName;
         var DistanceToHealthy = GetHeathyPathPercent (Season, RegionName);
-        if (DistanceToHealthy != "false"){DistanceToHealthy =Math.round( Math.max(DistanceToHealthy* Credit - Paid,0))}
+        if (DistanceToHealthy == "false"){console.log("no distance to healthy path set")}
+        else {DistanceToHealthy =Math.round( Math.max(DistanceToHealthy* Credit - Paid,0))}
         CheckBalanceMenuText (Season,Credit,Paid,Balance,DistanceToHealthy);
     }
     else {sayText(call.vars.BalanceInfo+ "\n2. Nitumie taarifa kwa meseji\n9. Rudi mwanzo")}
