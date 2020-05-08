@@ -98,7 +98,7 @@ var CheckBalanceMenuText = function (Season,Credit,Paid,Balance, DistanceToHealt
     if(DistanceToHealthy === false){BalanceInfo = Season+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance}
     else{BalanceInfo =Season+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance+"\nMalengo bora: "+ DistanceToHealthy}
     if (state.vars.NextSeason){sayText(BalanceInfo+  "\n1. Msimu uliopita\n2. Nitumie taarifa kwa meseji")}
-    else{sayText(BalanceInfo+  "\n2. Nitumie taarifa kwa meseji\n9. Rudi mwanzo"}
+    else{sayText(BalanceInfo+  "\n2. Nitumie taarifa kwa meseji\n9. Rudi mwanzo")}
     call.vars.BalanceInfo = BalanceInfo;
 }
 
