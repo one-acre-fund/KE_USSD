@@ -95,19 +95,16 @@ var SendPushSMStoContact = function(content, label){
 // TEXT functions
 
 var SplashMenuText = function (){
-    sayText("Karibu kwenye huduma ya One Acre Fund. Tafadhali bonyenza nambari zako 8 za akaunti. \n0) How to call the call centre")
-};
-var CallCentreInfoText = function (){
-    sayText("You can contact our call centre for free on 1234567890. Our business hours are xxx")
+    sayText("Karibu huduma ya One Acre Fund. Tafadhali bonyeza namba ya akaunti yako.\nPiga 0800713888 bure kama umeisahau namba yako")
 };
 var CallCentreInfoPlusBackText = function (){
-    sayText("You can contact our call centre for free on 1234567890. Our business hours are xxx\n9) Back to menu")
+    sayText("Unaweza kupiga simu huduma kwa wateja BURE kwa namba 0800713888 muda wa kazi kutokea saa 2 asbh mpaka 11 jioni. Asante\n9. Rudi mwanzo")
 };
 var MainMenuText = function (client){
-    sayText("Select Service\n1) Check balance\n2) How to make a payment\n3) Report issue\n4) Call centre details")
+    sayText("Tukuhudumie nini leo?\n1. Angalia salio\n2. Jinsi ya kufanya marejesho\n3. Repoti changamoto\n4. Wasiliana na huduma kwa wateja")
 };
 var SplashMenuFailure = function (){
-    sayText("Karibu kwenye huduma ya One Acre Fund. Tafadhali bonyenza nambari zako 8 za akaunti. \n0) How to call the call centre")
+    sayText("Namba ya akaunti uliyoingiza sio sahihi.Tafadhali angalia kwa usahihi namba yako unayotumia kufanya malipo, na uingize tena. Asante sana")
 };
 
 var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
@@ -121,29 +118,29 @@ var BalanceSMSConfirmText = function(){
     sayText("Thank you we have Send you an SMS with your balance\n9) back to main")
 }
 var PaymentInstrucMNOSelectText = function (){
-    sayText("OAF Supports the following providers:\n1) Vodacom\n2) Halotel\n3) FrancisTell\n9) Back to Menu")
+    sayText("1. M-Pesa\n2. Tigopesa\n3. Halopesa\n9. Rudi mwanzo")
 };
 
 var  InstructionsSendText = function (){
-    sayText("Thank you we have send you an SMS with the payment instruction\n9) back to main")
+    sayText("Asante sana. Taarifa za jinsi ya kutuma marejesho kwa njia ya simu zimetumwa kwa meseji. Wakulima Kwanza\n9. Rudi mwanzo")
 };
 
 var VodacomInstrucSMS = function (){
-    SendPushSMStoContact("Go to this and this USSD code and do this and this with merchant id 123456", "PaymentInstruction")
+    SendPushSMStoContact("Piga *150*00#\nChagua 4, Lipa kwa M-Pesa\nChagua 4, Ingiza Namba 354466\nIngiza na. yako ya akaunti\nIngiza kiasi\nIngiza neno la siri\nIngiza 1 kuthibitisha muamala", "Payment instruction")
 };
-var HalotelInstrucSMS = function (){
-    SendPushSMStoContact("Go to this and this USSD code and do this and this with merchant id 123456", "PaymentInstruction")
+var TigoInstrucSMS = function (){
+    SendPushSMStoContact("Piga *150*01#\nChagua 4, Lipa Bill\nChagua 3, Ingiza Namba 354466\nIngiza namba yako ya akaunti\nIngiza kiasi\nIngiza neno lako la siri\nIngiza 1 kuthibitisha muamala", "PaymentInstruction")
 };
-var FrancisTelInstrucSMS = function (){
-    SendPushSMStoContact("Go to this and this USSD code and do this and this with merchant id 123456", "PaymentInstruction")
+var HaloInstrucSMS = function (){
+    SendPushSMStoContact("Piga *150*88#\nChagua 4, Lipa kwa Halopesa\nChagua 3, Ingiza Namba 354466\nIngiza na yako ya akaunti\nIngiza kiasi\nIngiza neno la siri\nIngiza 1 kuthibitisha muamala", "PaymentInstruction")
 };
 
 var CallBackCatSelectText = function(){
-    sayText("1) Sent money to wrong account number\n2) Missing Input\n3) Insurance\n4) Refund Request\n5) Update:Phone Number\n6) Other\n9) back to main")
+    sayText("1. Nimekosea kutuma marejesho\n2. Nimekosa pembejeo\n3. Shida juu ya fao la mazishi\n4. Nahitaji kurudishiwa fedha\n5. Mengine\n\n9. Rudi mwanzo")
 }
 
 var CallBackConfirmText = function(){
-    sayText("Thank you we have recorded your request, you will receive a call from our agent within the next 2 business days\n9) back to main")
+    sayText("Asante sana kwa kuripoti changamoto yako. Timu yetu ya huduma kwa wateja wanashughulikia na kukujibu ndani ya masaa 48\n9. Rudi mwanzo")
 }
 
 // start logic flow
@@ -157,25 +154,19 @@ addInputHandler("SplashMenu", function(SplashMenu) {
     LogSessionID();
     InteractionCounter("SplashMenu");
     ClientAccNum = SplashMenu;
-    if (SplashMenu == "0"){
-        CallCentreInfoText();
-        hangUp();
+    if (RosterClientVal(ClientAccNum)){
+        console.log("SuccessFully Validated against Roster");
+        client = RosterClientGet(ClientAccNum);
+        state.vars.client = JSON.stringify(TrimClientJSON(client));
+        call.vars.client = JSON.stringify(TrimClientJSON(client));
+        call.vars.AccNum = ClientAccNum;
+        MainMenuText (client);
+        promptDigits("MainMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
     }
-    else {
-        if (RosterClientVal(ClientAccNum)){
-            console.log("SuccessFully Validated against Roster");
-            client = RosterClientGet(ClientAccNum);
-            state.vars.client = JSON.stringify(TrimClientJSON(client));
-            call.vars.client = JSON.stringify(TrimClientJSON(client));
-            call.vars.AccNum = ClientAccNum;
-            MainMenuText (client);
-            promptDigits("MainMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
-        }
-        else{
-            console.log("account number not valid");
-            SplashMenuFailure();
-            promptDigits("SplashMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
-        }
+    else{
+        console.log("account number not valid");
+        SplashMenuFailure();
+        promptDigits("SplashMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
     }
 });
 
@@ -231,13 +222,13 @@ addInputHandler("PaymentMNO", function(input) {
     }
 
     else if (input == 2){
-        HalotelInstrucSMS();
+        TigoInstrucSMS();
         InstructionsSendText();
         promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
 
     else if (input == 3){
-        FrancisTelInstrucSMS();
+        HaloInstrucSMS();
         InstructionsSendText();
         promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
@@ -253,7 +244,18 @@ addInputHandler("CatSelect", function(input) {
     LogSessionID();
     InteractionCounter("CatSelect");
     var client = JSON.parse(state.vars.client);
-    if (input == 1 || input == 2 || input == 3|| input == 4 ||input == 5 || input == 6){
+    if (input == 1 || input == 2 || input == 3|| input == 4 ||input == 5){
+
+        var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
+        var client = JSON.parse(state.vars.client);
+        var issuetype = "Test"
+        var sub = "Call back requested for: " + issuetype +" account number : "+ client.AccountNumber+ "With phonenumber: "+ contact.phone_number;
+        if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
+            console.log('created_ticket!');
+        }
+        else{
+            console.log('create_ticket failed on ' + client.AccountNumber);
+        }
         CallBackConfirmText();
         promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
