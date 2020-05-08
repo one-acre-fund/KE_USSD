@@ -245,11 +245,18 @@ addInputHandler("CatSelect", function(input) {
     InteractionCounter("CatSelect");
     var client = JSON.parse(state.vars.client);
     if (input == 1 || input == 2 || input == 3|| input == 4 ||input == 5){
+        var issuetype = ""
+        if (input == 1){issuetype = "Sent money to wrong account number"}
+        else if (input == 2){issuetype = "Missing Input"}
+        else if (input == 3){issuetype = "Funeral Insurance"}
+        else if (input == 4){issuetype = "Refund Request"}
+        else if (input == 5){issuetype = "Update Phone Number"}
 
         var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
         var client = JSON.parse(state.vars.client);
-        var issuetype = "Test"
-        var sub = "Call back requested for: " + issuetype +" account number : "+ client.AccountNumber+ "With phonenumber: "+ contact.phone_number;
+
+        //var sub = "Call back requested for: " + issuetype +" account number : "+ client.AccountNumber+ "With phonenumber: "+ contact.phone_number;
+        var sub = "TESTING PLEASE IGNORE"
         if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
             console.log('created_ticket!');
         }
