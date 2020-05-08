@@ -54,7 +54,7 @@ var RosterClientGet = function (AccNum){
 var DisplayBalance = function(client){
 
     var i = state.vars.SeasonCount;
-    if (typeof(client.BalanceHistory[i+1].SeasonName) == 'undefined'){state.vars.NextSeason = false}
+    if (typeof(client.BalanceHistory[i+1]) == 'undefined'){state.vars.NextSeason = false}
     else{state.vars.NextSeason = true}
     if (typeof(client.BalanceHistory[i].SeasonName) !== 'undefined'){
 
