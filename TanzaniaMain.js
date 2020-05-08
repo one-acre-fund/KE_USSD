@@ -52,21 +52,32 @@ var RosterClientGet = function (AccNum){
 };
 
 var DisplayBalance = function(client){
-    var Balance = '';
-    var Season = "";
-    var Credit = "";
-    var Paid = "";
+
     var i = state.vars.SeasonCount;
 
-    Season = client.BalanceHistory[i].SeasonName;
-    Paid = client.BalanceHistory[i].TotalRepayment_IncludingOverpayments;
-    Balance = client.BalanceHistory[i].Balance;
-    Credit = client.BalanceHistory[i].TotalCredit;
-    CheckBalanceMenuText (Season,Credit,Paid,Balance);
+    if (typeof(client.BalanceHistory[i].SeasonName) !== 'undefined'){
+
+        var Season = client.BalanceHistory[i].SeasonName;
+        var Paid = client.BalanceHistory[i].TotalRepayment_IncludingOverpayments;
+        var Balance = client.BalanceHistory[i].Balance;
+        var Credit = client.BalanceHistory[i].TotalCredit;
+        var RegionName = client.RegionName;
+        var DistanceToHealthy = "";
+        if (GetHeathyPathPercent (Season, RegionName)===false){DistanceToHealthy = false}
+        else {DistanceToHealthy = Max(GetHeathyPathPercent (Season, RegionName)* Cretit - Paid,0)}
+        CheckBalanceMenuText (Season,Credit,Paid,Balance,DistanceToHealthy);
+    }
+    else {sayText(call.vars.BalanceInfo+ "\n1) Send to me via SMS\n9) Back to menu")}
 }
 
-var CheckBalanceMenuText = function (Season,Credit,Paid,Balance){
-    BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance
+var GetHeathyPathPercent = function (Season,RegionName){
+    var table = project.getOrCreateDataTable("HealtyPath");
+    return false
+}
+
+var CheckBalanceMenuText = function (Season,Credit,Paid,Balance, DistanceToHealthy){
+    if(DistanceToHealthy === false){BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance}
+    else{(BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance+"\nTo healty: "+ DistanceToHealthy}
     sayText(BalanceInfo+  "\n1) Send to me via SMS\n9) Back to menu");
     call.vars.BalanceInfo = BalanceInfo;
 }
