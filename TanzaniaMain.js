@@ -73,22 +73,29 @@ var DisplayBalance = function(client){
 var GetHeathyPathPercent = function (Season,RegionName){
     var table = project.getOrCreateDataTable("HealthyPath");
     var weeknumber = moment().week();
+    console.log("Region: "+RegionName);
+    console.log("Season: "+Season);
     console.log("Current week number = "+weeknumber);
     cursorRegion = table.queryRows({
         vars: {'regionname': RegionName, 'seasonname': Season, 'weeknumber':weeknumber}
     });
+    console.log("Checking for specific region");
     cursorRegion.limit(1);
     if (cursorRegion.hasNext()){
+        
         var row = cursorRegion.next();
+        console.log("Percentage for specific region found: "+ row.vars.percentage);
         return row.vars.percentage;
     }
     else {
         cursorDefault = table.queryRows({
             vars:{'regionname': "Default", 'seasonname': Season, 'weeknumber':weeknumber}
         });
+        console.log("Checking for default");
         cursorDefault.limit(1);
         if (cursorDefault.hasNext()){
             var row = cursorDefault.next();
+            console.log("Percentage for default found: "+ row.vars.percentage);
             return row.vars.percentage;
         }
         else {return false}
