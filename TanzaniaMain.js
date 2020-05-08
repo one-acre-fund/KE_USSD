@@ -174,6 +174,7 @@ addInputHandler("MainMenu", function(MainMenu) {
     LogSessionID();
     InteractionCounter("MainMenu");
     client = JSON.parse(state.vars.client);
+    console.log(state.vars.client)
     if (MainMenu == 1){
         DisplayBalance(client);
         promptDigits("BalanceContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
@@ -255,8 +256,7 @@ addInputHandler("CatSelect", function(input) {
         var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
         var client = JSON.parse(state.vars.client);
 
-        //var sub = "Call back requested for: " + issuetype +" account number : "+ client.AccountNumber+ "With phonenumber: "+ contact.phone_number;
-        var sub = "TESTING PLEASE IGNORE"
+        var sub = "Call back requested for: " + issuetype +" account number : "+ client.AccountNumber+ "With phonenumber: "+ contact.phone_number;
         if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
             console.log('created_ticket!');
         }
