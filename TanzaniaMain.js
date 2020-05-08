@@ -251,7 +251,7 @@ addInputHandler("CatSelect", function(input) {
         else if (input == 2){issuetype = "Missing Input"}
         else if (input == 3){issuetype = "Funeral Insurance"}
         else if (input == 4){issuetype = "Refund Request"}
-        else if (input == 5){issuetype = "Update Phone Number"}
+        else if (input == 5){issuetype = "Other issue"}
 
         var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
         var client = JSON.parse(state.vars.client);
