@@ -77,7 +77,7 @@ var GetHeathyPathPercent = function (Season,RegionName){
 
 var CheckBalanceMenuText = function (Season,Credit,Paid,Balance, DistanceToHealthy){
     if(DistanceToHealthy === false){BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance}
-    else{(BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance+"\nTo healty: "+ DistanceToHealthy}
+    else{BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance+"\nTo healty: "+ DistanceToHealthy}
     sayText(BalanceInfo+  "\n1) Send to me via SMS\n9) Back to menu");
     call.vars.BalanceInfo = BalanceInfo;
 }
