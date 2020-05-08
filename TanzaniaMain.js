@@ -36,7 +36,7 @@ var RosterClientVal = function (AccNum){
         if (AccNum.length == 8){
             rosterAPI.verbose = true;
             rosterAPI.dataTableAttach();
-            response = rosterAPI.authClient(AccNum,'KE');
+            response = rosterAPI.authClient(AccNum,'TZ');
             return response;
         }
         else {
@@ -47,7 +47,7 @@ var RosterClientVal = function (AccNum){
 var RosterClientGet = function (AccNum){
     rosterAPI.verbose = true;
     rosterAPI.dataTableAttach();
-    client = rosterAPI.getClient(AccNum,'KE');
+    client = rosterAPI.getClient(AccNum,'TZ');
     return client;
 };
 
