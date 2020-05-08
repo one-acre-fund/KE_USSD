@@ -296,17 +296,22 @@ addInputHandler("BalanceContinue", function(input) {
     LogSessionID();
     InteractionCounter("BalanceContinue");
     var client = JSON.parse(state.vars.client);
-    if (input == 1){
+    if (input == 1 && state.vars.NextSeason){
+        state.vars.SeasonCount = state.vars.SeasonCount +1;
+        DisplayBalance(client);
+        promptDigits("BalanceContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+    else if (input == 2){
         SendPushSMStoContact(call.vars.BalanceInfo, "BalanceInfo");
-        BalanceSMSConfirmText();
-        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        // BalanceSMSConfirmText();
+        promptDigits("BalanceContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if (input == 9){
         MainMenuText (client);
         promptDigits("MainMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else{
-        DisplayBalance();
+        DisplayBalance(client);
         promptDigits("BalanceContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
 })
