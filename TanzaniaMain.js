@@ -71,7 +71,7 @@ var DisplayBalance = function(client){
 }
 
 var GetHeathyPathPercent = function (Season,RegionName){
-    var table = project.getOrCreateDataTable("HealtyPath");
+    var table = project.getOrCreateDataTable("HealthyPath");
     return false
 }
 
