@@ -136,7 +136,7 @@ var HaloInstrucSMS = function (){
 };
 
 var CallBackCatSelectText = function(){
-    sayText("1. Nimekosea kutuma marejesho\n2. Nimekosa pembejeo\n3. Shida juu ya fao la mazishi\n4. Nahitaji kurudishiwa fedha\n5. Mengine\n\n9. Rudi mwanzo")
+    sayText("1. Nimekosea kutuma marejesho\n2. Nimekosa pembejeo\n3. Shida juu ya fao la mazishi\n4. Nahitaji kurudishiwa fedha\n9. Rudi mwanzo")
 }
 
 var CallBackConfirmText = function(){
@@ -245,13 +245,12 @@ addInputHandler("CatSelect", function(input) {
     LogSessionID();
     InteractionCounter("CatSelect");
     var client = JSON.parse(state.vars.client);
-    if (input == 1 || input == 2 || input == 3|| input == 4 ||input == 5){
+    if (input == 1 || input == 2 || input == 3|| input == 4 ){
         var issuetype = ""
         if (input == 1){issuetype = "Sent money to wrong account number"}
         else if (input == 2){issuetype = "Missing Input"}
         else if (input == 3){issuetype = "Funeral Insurance"}
         else if (input == 4){issuetype = "Refund Request"}
-        else if (input == 5){issuetype = "Other issue"}
 
         var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
         var client = JSON.parse(state.vars.client);
