@@ -36,7 +36,7 @@ var RosterClientVal = function (AccNum){
         if (AccNum.length == 8){
             rosterAPI.verbose = true;
             rosterAPI.dataTableAttach();
-            response = rosterAPI.authClient(AccNum,'KE');
+            response = rosterAPI.authClient(AccNum,'TZ');
             return response;
         }
         else {
@@ -47,38 +47,59 @@ var RosterClientVal = function (AccNum){
 var RosterClientGet = function (AccNum){
     rosterAPI.verbose = true;
     rosterAPI.dataTableAttach();
-    client = rosterAPI.getClient(AccNum,'KE');
+    client = rosterAPI.getClient(AccNum,'TZ');
     return client;
 };
 
 var DisplayBalance = function(client){
-    var arrayLength = client.BalanceHistory.length;
-    var Balance = '';
-    var Season = "";
-    var Overpaid = false;
-    var Credit = "";
-    var Paid = "";
-    for (var i = 0; i < arrayLength; i++) {
-        if (client.BalanceHistory[i].Balance>0){
-            Season = client.BalanceHistory[i].SeasonName;
-            Paid = client.BalanceHistory[i].TotalRepayment_IncludingOverpayments;
-            Balance = client.BalanceHistory[i].Balance;
-            Credit = client.BalanceHistory[i].TotalCredit;
-        }
+
+    var i = state.vars.SeasonCount;
+    if (typeof(client.BalanceHistory[i+1]) == 'undefined'){state.vars.NextSeason = false}
+    else{state.vars.NextSeason = true}
+    if (typeof(client.BalanceHistory[i].SeasonName) !== 'undefined'){
+
+        var Season = client.BalanceHistory[i].SeasonName;
+        var Paid = client.BalanceHistory[i].TotalRepayment_IncludingOverpayments;
+        var Balance = client.BalanceHistory[i].Balance;
+        var Credit = client.BalanceHistory[i].TotalCredit;
+        var RegionName = client.RegionName;
+        var DistanceToHealthy = GetHeathyPathPercent (Season, RegionName);
+        if (DistanceToHealthy != "false"){DistanceToHealthy = Math.max(DistanceToHealthy* Credit - Paid,0)}
+        CheckBalanceMenuText (Season,Credit,Paid,Balance,DistanceToHealthy);
     }
-    if (Balance === ''){
-        for (var j = 0; j < arrayLength; j++) {
-            if (client.BalanceHistory[j].TotalRepayment_IncludingOverpayments>0){
-                Paid = client.BalanceHistory[j].TotalRepayment_IncludingOverpayments;
-                Balance = client.BalanceHistory[j].Balance;
-                Credit = client.BalanceHistory[j].TotalCredit;
-                Season = client.BalanceHistory[j].SeasonName;
-                j = 99;
-                Overpaid = true;
-            }
-        }
+    else {sayText(call.vars.BalanceInfo+ "\n2. Nitumie taarifa kwa meseji\n9. Rudi mwanzo")}
+}
+
+var GetHeathyPathPercent = function (Season,RegionName){
+    var table = project.getOrCreateDataTable("HealthyPath");
+    var weekstart = "";
+    cursorRegion = table.queryRows({
+        vars: {'regionname': RegionName, 'seasonname': Season, 'weekstart':weekstart}
+    });
+    cursorRegion.limit(1);
+    if (cursorRegion.hasNext()){
+        var row = cursorRegion.next();
+        return row.vars.percentage;
     }
-    CheckBalanceMenuText (Overpaid,Season,Credit,Paid,Balance);
+    else {
+        cursorDefault = table.queryRows({
+            vars:{'regionname': "Default", 'seasonname': Season, 'weekstart':weekstart}
+        });
+        cursorDefault.limit(1);
+        if (cursorDefault.hasNext()){
+            var row = cursorDefault.next();
+            return row.vars.percentage;
+        }
+        else {return false}
+    }
+}
+
+var CheckBalanceMenuText = function (Season,Credit,Paid,Balance, DistanceToHealthy){
+    if(DistanceToHealthy === false){BalanceInfo = Season+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance}
+    else{BalanceInfo =Season+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance+"\nMalengo bora: "+ DistanceToHealthy}
+    if (state.vars.NextSeason){sayText(BalanceInfo+  "\n1. Msimu uliopita\n2. Nitumie taarifa kwa meseji")}
+    else{sayText(BalanceInfo+  "\n2. Nitumie taarifa kwa meseji\n9. Rudi mwanzo")}
+    call.vars.BalanceInfo = BalanceInfo;
 }
 
 var SendPushSMStoContact = function(content, label){
@@ -105,13 +126,6 @@ var MainMenuText = function (client){
 };
 var SplashMenuFailure = function (){
     sayText("Namba ya akaunti uliyoingiza sio sahihi.Tafadhali angalia kwa usahihi namba yako unayotumia kufanya malipo, na uingize tena. Asante sana")
-};
-
-var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
-    if(Overpaid){BalanceInfo = Season+":\nJumla ya malipo: "+Paid+"\nJumla ya mkopo: "+Credit+"\nMalipo kwa mkopo unaofuata: "+Balance}
-    else {BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance}
-    sayText(BalanceInfo+  "\n1) Send to me via SMS\n9) Back to menu");
-    call.vars.BalanceInfo = BalanceInfo;
 };
 
 var BalanceSMSConfirmText = function(){
@@ -171,6 +185,7 @@ addInputHandler("SplashMenu", function(SplashMenu) {
 });
 
 addInputHandler("MainMenu", function(MainMenu) {
+    state.vars.SeasonCount = 0;
     LogSessionID();
     InteractionCounter("MainMenu");
     client = JSON.parse(state.vars.client);
@@ -281,17 +296,22 @@ addInputHandler("BalanceContinue", function(input) {
     LogSessionID();
     InteractionCounter("BalanceContinue");
     var client = JSON.parse(state.vars.client);
-    if (input == 1){
+    if (input == 1 && state.vars.NextSeason){
+        state.vars.SeasonCount = state.vars.SeasonCount +1;
+        DisplayBalance(client);
+        promptDigits("BalanceContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+    else if (input == 2){
         SendPushSMStoContact(call.vars.BalanceInfo, "BalanceInfo");
-        BalanceSMSConfirmText();
-        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        // BalanceSMSConfirmText();
+        promptDigits("BalanceContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if (input == 9){
         MainMenuText (client);
         promptDigits("MainMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else{
-        DisplayBalance();
+        DisplayBalance(client);
         promptDigits("BalanceContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
 })
