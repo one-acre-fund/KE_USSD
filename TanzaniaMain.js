@@ -64,7 +64,9 @@ var DisplayBalance = function(client){
         var Credit = client.BalanceHistory[i].TotalCredit;
         var RegionName = client.RegionName;
         var DistanceToHealthy = GetHeathyPathPercent (Season, RegionName);
-        if (DistanceToHealthy != "false"){DistanceToHealthy = Math.max(DistanceToHealthy* Credit - Paid,0)}
+        console.log("DistanceToHealth: "+ DistanceToHealthy)
+        if (DistanceToHealthy === false){console.log("no distance to healthy path set")}
+        else {DistanceToHealthy =Math.round( Math.max(DistanceToHealthy* Credit - Paid,0))}
         CheckBalanceMenuText (Season,Credit,Paid,Balance,DistanceToHealthy);
     }
     else {sayText(call.vars.BalanceInfo+ "\n2. Nitumie taarifa kwa meseji\n9. Rudi mwanzo")}
@@ -72,25 +74,36 @@ var DisplayBalance = function(client){
 
 var GetHeathyPathPercent = function (Season,RegionName){
     var table = project.getOrCreateDataTable("HealthyPath");
-    var weekstart = "";
+    var weeknumber = moment().week();
+    console.log("Region: "+RegionName);
+    console.log("Season: "+Season);
+    console.log("Current week number = "+weeknumber);
     cursorRegion = table.queryRows({
-        vars: {'regionname': RegionName, 'seasonname': Season, 'weekstart':weekstart}
+        vars: {'regionname': RegionName, 'seasonname': Season, 'weeknumber':weeknumber}
     });
+    console.log("Checking for specific region");
     cursorRegion.limit(1);
     if (cursorRegion.hasNext()){
+        
         var row = cursorRegion.next();
+        console.log("Percentage for specific region found: "+ row.vars.percentage);
         return row.vars.percentage;
     }
     else {
         cursorDefault = table.queryRows({
-            vars:{'regionname': "Default", 'seasonname': Season, 'weekstart':weekstart}
+            vars:{'regionname': "Default", 'seasonname': Season, 'weeknumber':weeknumber}
         });
+        console.log("Checking for default");
         cursorDefault.limit(1);
         if (cursorDefault.hasNext()){
             var row = cursorDefault.next();
+            console.log("Percentage for default found: "+ row.vars.percentage);
             return row.vars.percentage;
         }
-        else {return false}
+        else {
+            console.log("No heathy path data found")
+            return false
+        }
     }
 }
 
