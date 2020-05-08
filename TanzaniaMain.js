@@ -64,6 +64,7 @@ var DisplayBalance = function(client){
         var Credit = client.BalanceHistory[i].TotalCredit;
         var RegionName = client.RegionName;
         var DistanceToHealthy = GetHeathyPathPercent (Season, RegionName);
+        console.log("DistanceToHealth: "+ DistanceToHealth)
         if (DistanceToHealthy == "false"){console.log("no distance to healthy path set")}
         else {DistanceToHealthy =Math.round( Math.max(DistanceToHealthy* Credit - Paid,0))}
         CheckBalanceMenuText (Season,Credit,Paid,Balance,DistanceToHealthy);
@@ -99,7 +100,10 @@ var GetHeathyPathPercent = function (Season,RegionName){
             console.log("Percentage for default found: "+ row.vars.percentage);
             return row.vars.percentage;
         }
-        else {return false}
+        else {
+            console.log("No heathy path data found")
+            return false
+        }
     }
 }
 
