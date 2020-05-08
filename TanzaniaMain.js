@@ -66,10 +66,10 @@ var DisplayBalance = function(client){
 }
 
 var CheckBalanceMenuText = function (Season,Credit,Paid,Balance){
-    BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance}
+    BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance
     sayText(BalanceInfo+  "\n1) Send to me via SMS\n9) Back to menu");
     call.vars.BalanceInfo = BalanceInfo;
-};
+}
 
 var SendPushSMStoContact = function(content, label){
     var Label = project.getOrCreateLabel(label);
