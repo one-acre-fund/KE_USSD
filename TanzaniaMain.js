@@ -54,7 +54,8 @@ var RosterClientGet = function (AccNum){
 var DisplayBalance = function(client){
 
     var i = state.vars.SeasonCount;
-
+    if (typeof(client.BalanceHistory[i+1].SeasonName) == 'undefined'){state.vars.NextSeason = false}
+    else{state.vars.NextSeason = true}
     if (typeof(client.BalanceHistory[i].SeasonName) !== 'undefined'){
 
         var Season = client.BalanceHistory[i].SeasonName;
@@ -62,23 +63,42 @@ var DisplayBalance = function(client){
         var Balance = client.BalanceHistory[i].Balance;
         var Credit = client.BalanceHistory[i].TotalCredit;
         var RegionName = client.RegionName;
-        var DistanceToHealthy = "";
-        if (GetHeathyPathPercent (Season, RegionName)===false){DistanceToHealthy = false}
-        else {DistanceToHealthy = Max(GetHeathyPathPercent (Season, RegionName)* Cretit - Paid,0)}
+        var DistanceToHealthy = GetHeathyPathPercent (Season, RegionName);
+        if (DistanceToHealthy != "false"){DistanceToHealthy = Max(DistanceToHealthy* Credit - Paid,0)}
         CheckBalanceMenuText (Season,Credit,Paid,Balance,DistanceToHealthy);
     }
-    else {sayText(call.vars.BalanceInfo+ "\n1) Send to me via SMS\n9) Back to menu")}
+    else {sayText(call.vars.BalanceInfo+ "\n2. Nitumie taarifa kwa meseji\n9. Rudi mwanzo")}
 }
 
 var GetHeathyPathPercent = function (Season,RegionName){
     var table = project.getOrCreateDataTable("HealthyPath");
-    return false
+    var weekstart = "";
+    cursorRegion = table.queryRows({
+        vars: {'regionname': RegionName, 'seasonname': Season, 'weekstart':weekstart}
+    });
+    cursorRegion.limit(1);
+    if (cursorRegion.hasNext()){
+        var row = cursorRegion.next();
+        return row.vars.percentage;
+    }
+    else {
+        cursorDefault = table.queryRows({
+            vars:{'regionname': "Default", 'seasonname': Season, 'weekstart':weekstart}
+        });
+        cursorDefault.limit(1);
+        if (cursorDefault.hasNext()){
+            var row = cursorDefault.next();
+            return row.vars.percentage;
+        }
+        else {return false}
+    }
 }
 
 var CheckBalanceMenuText = function (Season,Credit,Paid,Balance, DistanceToHealthy){
-    if(DistanceToHealthy === false){BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance}
-    else{BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance+"\nTo healty: "+ DistanceToHealthy}
-    sayText(BalanceInfo+  "\n1) Send to me via SMS\n9) Back to menu");
+    if(DistanceToHealthy === false){BalanceInfo = Season+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance}
+    else{BalanceInfo =Season+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance+"\nMalengo bora: "+ DistanceToHealthy}
+    if (state.vars.NextSeason){sayText(BalanceInfo+  "\n1. Msimu uliopita\n2. Nitumie taarifa kwa meseji")}
+    else{sayText(BalanceInfo+  "\n2. Nitumie taarifa kwa meseji\n9. Rudi mwanzo"}
     call.vars.BalanceInfo = BalanceInfo;
 }
 
