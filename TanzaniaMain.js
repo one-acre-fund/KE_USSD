@@ -84,7 +84,7 @@ var GetHeathyPathPercent = function (Season,RegionName){
     }
     else {
         cursorDefault = table.queryRows({
-            vars:{'regionname': "Default", 'seasonname': Season, 'weekstart':weekstart}
+            vars:{'regionname': "Default", 'seasonname': Season, 'weeknumber':weeknumber}
         });
         cursorDefault.limit(1);
         if (cursorDefault.hasNext()){
