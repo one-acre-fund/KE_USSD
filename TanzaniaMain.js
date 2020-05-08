@@ -52,11 +52,11 @@ var RosterClientGet = function (AccNum){
 };
 
 var DisplayBalance = function(client){
-    var arrayLength = client.BalanceHistory.length;
     var Balance = '';
     var Season = "";
     var Credit = "";
     var Paid = "";
+    var i = state.vars.SeasonCount;
 
     Season = client.BalanceHistory[i].SeasonName;
     Paid = client.BalanceHistory[i].TotalRepayment_IncludingOverpayments;
@@ -154,6 +154,7 @@ addInputHandler("SplashMenu", function(SplashMenu) {
 });
 
 addInputHandler("MainMenu", function(MainMenu) {
+    state.vars.SeasonCount = 0;
     LogSessionID();
     InteractionCounter("MainMenu");
     client = JSON.parse(state.vars.client);
