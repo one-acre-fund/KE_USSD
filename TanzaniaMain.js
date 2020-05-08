@@ -55,31 +55,21 @@ var DisplayBalance = function(client){
     var arrayLength = client.BalanceHistory.length;
     var Balance = '';
     var Season = "";
-    var Overpaid = false;
     var Credit = "";
     var Paid = "";
-    for (var i = 0; i < arrayLength; i++) {
-        if (client.BalanceHistory[i].Balance>0){
-            Season = client.BalanceHistory[i].SeasonName;
-            Paid = client.BalanceHistory[i].TotalRepayment_IncludingOverpayments;
-            Balance = client.BalanceHistory[i].Balance;
-            Credit = client.BalanceHistory[i].TotalCredit;
-        }
-    }
-    if (Balance === ''){
-        for (var j = 0; j < arrayLength; j++) {
-            if (client.BalanceHistory[j].TotalRepayment_IncludingOverpayments>0){
-                Paid = client.BalanceHistory[j].TotalRepayment_IncludingOverpayments;
-                Balance = client.BalanceHistory[j].Balance;
-                Credit = client.BalanceHistory[j].TotalCredit;
-                Season = client.BalanceHistory[j].SeasonName;
-                j = 99;
-                Overpaid = true;
-            }
-        }
-    }
-    CheckBalanceMenuText (Overpaid,Season,Credit,Paid,Balance);
+
+    Season = client.BalanceHistory[i].SeasonName;
+    Paid = client.BalanceHistory[i].TotalRepayment_IncludingOverpayments;
+    Balance = client.BalanceHistory[i].Balance;
+    Credit = client.BalanceHistory[i].TotalCredit;
+    CheckBalanceMenuText (Season,Credit,Paid,Balance);
 }
+
+var CheckBalanceMenuText = function (Season,Credit,Paid,Balance){
+    BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance}
+    sayText(BalanceInfo+  "\n1) Send to me via SMS\n9) Back to menu");
+    call.vars.BalanceInfo = BalanceInfo;
+};
 
 var SendPushSMStoContact = function(content, label){
     var Label = project.getOrCreateLabel(label);
@@ -105,13 +95,6 @@ var MainMenuText = function (client){
 };
 var SplashMenuFailure = function (){
     sayText("Namba ya akaunti uliyoingiza sio sahihi.Tafadhali angalia kwa usahihi namba yako unayotumia kufanya malipo, na uingize tena. Asante sana")
-};
-
-var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
-    if(Overpaid){BalanceInfo = Season+":\nJumla ya malipo: "+Paid+"\nJumla ya mkopo: "+Credit+"\nMalipo kwa mkopo unaofuata: "+Balance}
-    else {BalanceInfo = Season+":\nPaid: "+Paid+"\nTotal credit: "+Credit+"\nSalio: "+Balance}
-    sayText(BalanceInfo+  "\n1) Send to me via SMS\n9) Back to menu");
-    call.vars.BalanceInfo = BalanceInfo;
 };
 
 var BalanceSMSConfirmText = function(){
