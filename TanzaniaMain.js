@@ -153,13 +153,13 @@ var  InstructionsSendText = function (){
 };
 
 var VodacomInstrucSMS = function (){
-    SendPushSMStoContact("Piga *150*00#\nChagua 4, Lipa kwa M-Pesa\nChagua 4, Ingiza Namba 354466\nIngiza na. yako ya akaunti\nIngiza kiasi\nIngiza neno la siri\nIngiza 1 kuthibitisha muamala", "Payment instruction")
+    SendPushSMStoContact("Piga *150*00#\nChagua 4, Lipa kwa M-Pesa\nChagua 4, Ingiza Namba 354466\nIngiza akaunti namba yako\nIngiza kiasi\nIngiza neno la siri\nIngiza 1 kuthibitisha muamala", "Payment instruction")
 };
 var TigoInstrucSMS = function (){
     SendPushSMStoContact("Piga *150*01#\nChagua 4, Lipa Bill\nChagua 3, Ingiza Namba 354466\nIngiza namba yako ya akaunti\nIngiza kiasi\nIngiza neno lako la siri\nIngiza 1 kuthibitisha muamala", "PaymentInstruction")
 };
 var HaloInstrucSMS = function (){
-    SendPushSMStoContact("Piga *150*88#\nChagua 4, Lipa kwa Halopesa\nChagua 3, Ingiza Namba 354466\nIngiza na yako ya akaunti\nIngiza kiasi\nIngiza neno la siri\nIngiza 1 kuthibitisha muamala", "PaymentInstruction")
+    SendPushSMStoContact("Piga *150*88#\nChagua 4, Lipa kwa Halopesa\nChagua 3, Ingiza Namba 354466\nIngiza akaunti namba yako\nIngiza kiasi\nIngiza neno la siri\nIngiza 1 kuthibitisha muamala", "PaymentInstruction")
 };
 
 var CallBackCatSelectText = function(){
