@@ -108,7 +108,9 @@ var GetHeathyPathPercent = function (Season,RegionName){
 }
 
 var CheckBalanceMenuText = function (Season,Credit,Paid,Balance, DistanceToHealthy){
-    if(DistanceToHealthy === false){BalanceInfo = Season+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance}
+    var client = JSON.parse(state.vars.client);
+    var firstname = client.FirstName;
+    if(DistanceToHealthy === false){BalanceInfo = "Mambo "+firstname+ "\n"+Season.substring(0, 4)+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance}
     else{BalanceInfo =Season+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance+"\nMalengo bora: "+ DistanceToHealthy}
     if (state.vars.NextSeason){sayText(BalanceInfo+  "\n1. Msimu uliopita\n2. Nitumie taarifa kwa meseji")}
     else{sayText(BalanceInfo+  "\n2. Nitumie taarifa kwa meseji\n9. Rudi mwanzo")}
@@ -122,7 +124,7 @@ var SendPushSMStoContact = function(content, label){
         to_number:contact.phone_number,
         route_id: RouteIDPush,
         label_ids : [Label.id]
-    });    
+    });  
 };
 
 
