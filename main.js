@@ -1139,7 +1139,7 @@ var SHSCodeSMS = function(shscode){
         to_number: contact.phone_number, 
         start_time_offset: 0,
         service_id: "SV44cdffa755e06381",
-        vars: {content: SMStext}
+        vars: {content: SMSText}
     });
   
 };
