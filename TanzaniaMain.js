@@ -137,7 +137,7 @@ var CallCentreInfoPlusBackText = function (){
     sayText("Unaweza kupiga simu huduma kwa wateja BURE kwa namba 0800713888 muda wa kazi kutokea saa 2 asbh mpaka 11 jioni. Asante\n9. Rudi mwanzo")
 };
 var MainMenuText = function (client){
-    sayText("Tukuhudumie nini leo?\n1. Angalia salio\n2. Jinsi ya kufanya marejesho\n3. Repoti changamoto\n4. Wasiliana na huduma kwa wateja")
+    sayText("Tukuhudumie nini leo?\n1. Angalia salio\n2. Jinsi ya kufanya marejesho\n3. Tafadhali nipigie\n4. Wasiliana na huduma kwa wateja")
 };
 var SplashMenuFailure = function (){
     sayText("Namba ya akaunti uliyoingiza sio sahihi.Tafadhali angalia kwa usahihi namba yako unayotumia kufanya malipo, na uingize tena. Asante sana")
@@ -214,8 +214,21 @@ addInputHandler("MainMenu", function(MainMenu) {
         promptDigits("PaymentMNO", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if (MainMenu == 3){
-        CallBackCatSelectText();
-        promptDigits("CatSelect", {submitOnHash: true, maxDigits: 1, timeout: 5});
+
+        var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
+        var client = JSON.parse(state.vars.client);
+
+        var sub = "USSD - Call back request";
+        if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
+            console.log('created_ticket!');
+        }
+        else{
+            console.log('create_ticket failed on ' + client.AccountNumber);
+            MainMenuText (client);
+            promptDigits("MainMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        }
+        CallBackConfirmText();
+        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if (MainMenu == 4){
         CallCentreInfoPlusBackText();
@@ -271,41 +284,39 @@ addInputHandler("PaymentMNO", function(input) {
 
 });
 
-addInputHandler("CatSelect", function(input) {
-    LogSessionID();
-    InteractionCounter("CatSelect");
-    var client = JSON.parse(state.vars.client);
-    if (input == 1 || input == 2 || input == 3|| input == 4 ){
-        var issuetype = ""
-        if (input == 1){issuetype = "Sent money to wrong account number"}
-        else if (input == 2){issuetype = "Missing Input"}
-        else if (input == 3){issuetype = "Funeral Insurance"}
-        else if (input == 4){issuetype = "Refund Request"}
-
-        var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
-        var client = JSON.parse(state.vars.client);
-
-        var sub = "Call back requested for: " + issuetype +" account number : "+ client.AccountNumber+ "With phonenumber: "+ contact.phone_number;
-        if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
-            console.log('created_ticket!');
-        }
-        else{
-            console.log('create_ticket failed on ' + client.AccountNumber);
-        }
-        CallBackConfirmText();
-        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
-    }
-    else if (input == 9){
-        MainMenuText (client);
-        promptDigits("MainMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
-    }
-    else{
-        CallBackCatSelectText();
-        promptDigits("CatSelect", {submitOnHash: true, maxDigits: 1, timeout: 5});
-    }
-})
-
-// BalanceContinue
+//addInputHandler("CatSelect", function(input) {
+//    LogSessionID();
+//    InteractionCounter("CatSelect");
+//    var client = JSON.parse(state.vars.client);
+//    if (input == 1 || input == 2 || input == 3|| input == 4 ){
+//        var issuetype = ""
+//        if (input == 1){issuetype = "Sent money to wrong account number"}
+//        else if (input == 2){issuetype = "Missing Input"}
+//        else if (input == 3){issuetype = "Funeral Insurance"}
+//        else if (input == 4){issuetype = "Refund Request"}
+//
+//        var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
+//        var client = JSON.parse(state.vars.client);
+//
+//        var sub = "Call back requested for: " + issuetype +" account number : "+ client.AccountNumber+ "With phonenumber: "+ contact.phone_number;
+//        if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
+//            console.log('created_ticket!');
+//        }
+//        else{
+//            console.log('create_ticket failed on ' + client.AccountNumber);
+//        }
+//        CallBackConfirmText();
+//        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
+//    }
+//    else if (input == 9){
+//        MainMenuText (client);
+//        promptDigits("MainMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
+//    }
+//    else{
+//        CallBackCatSelectText();
+//        promptDigits("CatSelect", {submitOnHash: true, maxDigits: 1, timeout: 5});
+//    }
+//})
 
 addInputHandler("BalanceContinue", function(input) {
     LogSessionID();
@@ -318,7 +329,7 @@ addInputHandler("BalanceContinue", function(input) {
     }
     else if (input == 2){
         SendPushSMStoContact(call.vars.BalanceInfo, "BalanceInfo");
-        // BalanceSMSConfirmText();
+        BalanceSMSConfirmText();
         promptDigits("BalanceContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if (input == 9){
