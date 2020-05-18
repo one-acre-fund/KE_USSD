@@ -111,7 +111,7 @@ var CheckBalanceMenuText = function (Season,Credit,Paid,Balance, DistanceToHealt
     var client = JSON.parse(state.vars.client);
     var firstname = client.FirstName;
     if(DistanceToHealthy === false){BalanceInfo = "Mambo "+firstname+ "\n"+Season.substring(0, 4)+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance}
-    else{BalanceInfo =Season+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance+"\nMalengo bora: "+ DistanceToHealthy}
+    else{BalanceInfo = Season.substring(0, 4)+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance+"\nMalengo bora: "+ DistanceToHealthy}
     if (state.vars.NextSeason){sayText(BalanceInfo+  "\n1. Msimu uliopita\n2. Nitumie taarifa kwa meseji")}
     else{sayText(BalanceInfo+  "\n2. Nitumie taarifa kwa meseji\n9. Rudi mwanzo")}
     call.vars.BalanceInfo = BalanceInfo;
