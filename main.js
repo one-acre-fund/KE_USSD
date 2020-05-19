@@ -1022,8 +1022,8 @@ var CheckBalanceMenuText = function (Overpaid,Season,Credit,Paid,Balance){
 };
 
 var TrainingMenuText = function (){
-    if (GetLang()){sayText("1.Maize Intercrop\n2.Maize Top Dress\n3.Tree bag planting\n4.Pest Mitigation\n5.Tree Socketing\n6.Sorghum Weeding\n7.Tree Transplanting")}
-    else {sayText("1.Kupanda Mahindi na Maharagwe\n2.Top Dress\n3. Kupanda miti\n4. Wadudu na Magonjwa\n5. Socketing ya Miti\n6. Kupalilia Wimbi\n7. Kupanda Miti")}
+    if (GetLang()){sayText("1:Tree Hardening/Transplanting\n2:Tree Bag Planting\n3:Tree Socketing\n4:Sorghum Weeding\n5:Maize Topdress\n6:Maize Intercrop\n7:Pest Mitigation")}
+    else {sayText("1:Kufunua/Kupanda Miti\n2:Kupanda miti mifukoni\n3:Socketing Miti\n4:Kupalilia Wimbi\n5:Top Dress\n6:Kupanda Mahindi/Maharagwe\n7:Wadudu/Magonjwa")}
 };
 
 var TrainingTriggeredText = function (){
@@ -3054,7 +3054,7 @@ addInputHandler('TrainingSelect', function(input) {
         contact.save();
     }   
     InteractionCounter('TrainingSelect');
-    if (input == 1){
+    if (input == 6){
 
         var Random = Math.random();
         console.log(Random)
@@ -3067,27 +3067,27 @@ addInputHandler('TrainingSelect', function(input) {
     
         TrainingTriggeredText();
     }
-    else if (input == 2){
+    else if (input == 5){
         TriggerTraining("SVffc2c4aa2be69ab5");
         TrainingTriggeredText();
     }
-    else if (input == 3){
+    else if (input == 2){
         TriggerTraining("SV647a6f30fad7625d");
         TrainingTriggeredText();
     }
-    else if (input == 4){
+    else if (input == 7){
         TriggerTraining("SV6d234d3094715099");
         TrainingTriggeredText();
     }
-    else if (input == 5){
+    else if (input == 3){
         TriggerTraining("SV8419e6228a23cec2");
         TrainingTriggeredText();
     }
-    else if (input == 6){
+    else if (input == 4){
         TriggerTraining("SV7aa1486d6be8ae59");
         TrainingTriggeredText();
     }
-    else if (input == 7){
+    else if (input == 1){
         TriggerTraining("SV87c0c32ff5e3ebaa");
         TrainingTriggeredText();
     }
