@@ -67,7 +67,9 @@ var DisplayBalance = function(client){
         console.log("DistanceToHealth: "+ DistanceToHealthy)
         if (DistanceToHealthy === false){console.log("no distance to healthy path set")}
         else {DistanceToHealthy =Math.round( Math.max(DistanceToHealthy* Credit - Paid,0))}
+        if (DistanceToHealthy === 0){DistanceToHealthy = "-"};
         CheckBalanceMenuText (Season,Credit,Paid,Balance,DistanceToHealthy);
+
     }
     else {sayText(call.vars.BalanceInfo+ "\n2. Nitumie taarifa kwa meseji\n9. Rudi mwanzo")}
 }
@@ -110,8 +112,8 @@ var GetHeathyPathPercent = function (Season,RegionName){
 var CheckBalanceMenuText = function (Season,Credit,Paid,Balance, DistanceToHealthy){
     var client = JSON.parse(state.vars.client);
     var firstname = client.FirstName;
-    if(DistanceToHealthy === false){BalanceInfo = "Mambo "+firstname+ "\n"+Season.substring(0, 4)+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance}
-    else{BalanceInfo = "Mambo "+firstname+ "\n"+ Season.substring(0, 4)+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance+"\nMalengo bora: "+ DistanceToHealthy}
+    if(DistanceToHealthy === false){BalanceInfo = "Habari "+firstname+ "\n"+Season.substring(0, 4)+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance}
+    else{BalanceInfo = "Habari "+firstname+ "\n"+ Season.substring(0, 4)+"\nUmelipa: "+Paid+"/"+Credit+"\nIliyobaki: "+Balance+"\nKiasi ili kufikia lengo: "+ DistanceToHealthy}
     if (state.vars.NextSeason){sayText(BalanceInfo+  "\n1. Msimu uliopita\n2. Nitumie taarifa kwa meseji")}
     else{sayText(BalanceInfo+  "\n2. Nitumie taarifa kwa meseji\n9. Rudi mwanzo")}
     call.vars.BalanceInfo = BalanceInfo;
@@ -131,10 +133,10 @@ var SendPushSMStoContact = function(content, label){
 // TEXT functions
 
 var SplashMenuText = function (){
-    sayText("Karibu huduma ya One Acre Fund. Tafadhali bonyeza namba ya akaunti yako.\nPiga 0800713888 bure kama umeisahau namba yako")
+    sayText("Karibu One Acre Fund. Tafadhali andika namba yako ya akaunti\nPiga 0800713888 bure kama umeisahau namba yako au bonyeza 1 kuomba upigiwe")
 };
 var CallCentreInfoPlusBackText = function (){
-    sayText("Unaweza kupiga simu huduma kwa wateja BURE kwa namba 0800713888 muda wa kazi kutokea saa 2 asbh mpaka 11 jioni. Asante\n9. Rudi mwanzo")
+    sayText("Tafadhali piga 0800713888 bure, Jumatatu hadi Ijumaa kuanzia saa 2 asubuhi hadi saa 11 jioni. Asante\n9. Rudi mwanzo")
 };
 var MainMenuText = function (client){
     sayText("Tukuhudumie nini leo?\n1. Angalia salio\n2. Jinsi ya kufanya marejesho\n3. Tafadhali nipigie\n4. Wasiliana na huduma kwa wateja")
@@ -144,7 +146,7 @@ var SplashMenuFailure = function (){
 };
 
 var BalanceSMSConfirmText = function(){
-    sayText("Thank you we have Send you an SMS with your balance\n9) back to main")
+    sayText("Asante sana. Taarifa za maendeleo ya marejesho yako zimetumwa kwa meseji.\n1. Jinsi ya kufanya marejesho\n9. Rudi mwanzo")
 }
 var PaymentInstrucMNOSelectText = function (){
     sayText("1. M-Pesa\n2. Tigopesa\n3. Halopesa\n9. Rudi mwanzo")
@@ -161,7 +163,7 @@ var TigoInstrucSMS = function (){
     SendPushSMStoContact("Piga *150*01#\nChagua 4, Lipa Bill\nChagua 3, Ingiza Namba 354466\nIngiza namba yako ya akaunti\nIngiza kiasi\nIngiza neno lako la siri\nIngiza 1 kuthibitisha muamala", "PaymentInstruction")
 };
 var HaloInstrucSMS = function (){
-    SendPushSMStoContact("Piga *150*88#\nChagua 4, Lipa kwa Halopesa\nChagua 3, Ingiza Namba 354466\nIngiza akaunti namba yako\nIngiza kiasi\nIngiza neno la siri\nIngiza 1 kuthibitisha muamala", "PaymentInstruction")
+    SendPushSMStoContact("Piga *150*88#\nChagua 4, Lipa bili\nChagua 3, Ingiza Namba 354466\nIngiza akaunti namba yako\nIngiza kiasi\nIngiza neno la siri\nIngiza 1 kuthibitisha muamala", "PaymentInstruction")
 };
 
 var CallBackCatSelectText = function(){
@@ -169,7 +171,11 @@ var CallBackCatSelectText = function(){
 }
 
 var CallBackConfirmText = function(){
-    sayText("Asante sana kwa kuripoti changamoto yako. Timu yetu ya huduma kwa wateja wanashughulikia na kukujibu ndani ya masaa 48\n9. Rudi mwanzo")
+    sayText("Asante sana kwa kuomba upigiwe. Utapigiwa simu na Huduma kwa wateja hivi karibuni kwa siku na muda wa kazi\n9. Rudi mwanzo")
+}
+
+var CallBackConfirmNoBackText = function(){
+    sayText("Asante sana kwa kuomba upigiwe. Utapigiwa simu na Huduma kwa wateja hivi karibuni kwa siku na muda wa kazi")
 }
 
 // start logic flow
@@ -182,20 +188,36 @@ global.main = function () {
 addInputHandler("SplashMenu", function(SplashMenu) {
     LogSessionID();
     InteractionCounter("SplashMenu");
-    ClientAccNum = SplashMenu;
-    if (RosterClientVal(ClientAccNum)){
-        console.log("SuccessFully Validated against Roster");
-        client = RosterClientGet(ClientAccNum);
-        state.vars.client = JSON.stringify(TrimClientJSON(client));
-        call.vars.client = JSON.stringify(TrimClientJSON(client));
-        call.vars.AccNum = ClientAccNum;
-        MainMenuText (client);
-        promptDigits("MainMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
+    if (SplashMenu == 1){
+        var create_zd_ticket = require('ext/zd-tr/lib/create-ticket');
+        var sub = "USSD - Call back request";
+        if(create_zd_ticket("Unknown", sub, contact.phone_number)){
+            console.log('created_ticket!');
+            CallBackConfirmNoBackText();
+            hangUp();
+        }
+        else{
+            console.log('create_ticket failed on ' + client.AccountNumber);
+            SplashMenuText();
+            promptDigits("SplashMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
+        }
     }
-    else{
-        console.log("account number not valid");
-        SplashMenuFailure();
-        promptDigits("SplashMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
+    else {
+        ClientAccNum = SplashMenu;
+        if (RosterClientVal(ClientAccNum)){
+            console.log("SuccessFully Validated against Roster");
+            client = RosterClientGet(ClientAccNum);
+            state.vars.client = JSON.stringify(TrimClientJSON(client));
+            call.vars.client = JSON.stringify(TrimClientJSON(client));
+            call.vars.AccNum = ClientAccNum;
+            MainMenuText (client);
+            promptDigits("MainMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
+        }
+        else{
+            console.log("account number not valid");
+            SplashMenuFailure();
+            promptDigits("SplashMenu", {submitOnHash: true, maxDigits: 8, timeout: 5});
+        }
     }
 });
 
@@ -221,14 +243,15 @@ addInputHandler("MainMenu", function(MainMenu) {
         var sub = "USSD - Call back request";
         if(create_zd_ticket(client.AccountNumber, sub, contact.phone_number)){
             console.log('created_ticket!');
+            CallBackConfirmText();
+            promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
         }
         else{
             console.log('create_ticket failed on ' + client.AccountNumber);
             MainMenuText (client);
             promptDigits("MainMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
         }
-        CallBackConfirmText();
-        promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        
     }
     else if (MainMenu == 4){
         CallCentreInfoPlusBackText();
@@ -330,7 +353,7 @@ addInputHandler("BalanceContinue", function(input) {
     else if (input == 2){
         SendPushSMStoContact(call.vars.BalanceInfo, "BalanceInfo");
         BalanceSMSConfirmText();
-        promptDigits("BalanceContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
+        promptDigits("BalanceSMSContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if (input == 9){
         MainMenuText (client);
@@ -341,3 +364,18 @@ addInputHandler("BalanceContinue", function(input) {
         promptDigits("BalanceContinue", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
 })
+
+addInputHandler("BalanceSMSContinue", function(input) {
+    LogSessionID();
+    InteractionCounter("BalanceSMSContinue");
+
+    if (input == 1){
+        PaymentInstrucMNOSelectText();
+        promptDigits("PaymentMNO", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+    else if (input == 9){
+        MainMenuText (client);
+        promptDigits("MainMenu", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+
+});
