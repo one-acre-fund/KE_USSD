@@ -1558,6 +1558,45 @@ var StaffConfrimAbsenceEmailHR = function(){
     console.log("Pending foprmat");
 };
 
+
+// Enrollment Menu
+// Enrollment request Menu
+var EnrollmentNationalIdMenu = function(){
+    if (GetLang()){sayText("What is their national ID?")}
+    else {sayText("Namba yao ya kitambulisho ni gani?")}
+};
+
+var EnrollmentNationalIdInvalidText = function(){
+    if (GetLang()){sayText("Invalid entry.\nPlease enter a valid national id.")}
+    else {sayText("Usajili usiosahihi\nTafadhali weka nambari sahihi ya kitambulisho")}
+};
+
+var EnrollmentNationalIDConfirmationMenu = function(nationalId){
+    if (GetLang()){sayText("You have entered "+nationalId+" is this really your national ID?\n1) Yes\n2) No")}
+    else {sayText("Umeingia "+nationalId+"kweli hii ndio kitambulisho chako cha kitaifa?\n1) Ndio\n2) Hapana")}
+};
+
+var EnrollmentPhoneNumberRequestMenu = function(){
+    if (GetLang()){sayText("What is your phone number?")}
+    else {sayText("Nambari yako ya simu ni nini?")}
+};
+
+var EnrollmentPhoneNumberConfirmationMenu = function(phone){
+    if (GetLang()){sayText("You have entered "+phone+" is this really your phone number?\n1) Yes\n2) No")}
+    else {sayText("Umeingia "+phone+" kweli hii ndio nambari yako ya simu?\n1) Ndiyo\n 2) Hapana")}
+};
+
+var EnrollmentInvalidPhoneMenu = function(phone){
+    if(GetLang()){sayText("You have entered an invalid phone number, try again")}
+    else{sayText("Umeingiza nambari ya simu isiyo sahihi, jaribu tena")}
+};
+
+var EnrollmentRequestSMS = function(phoneNumber){
+    if(GetLang()){return "Thank you for sending enrollment request. OAF staff will call you through"+ phoneNumber +". Keep your ID  and other enrollment information ready.";}
+    else{return "Asante kwa kutuma ombi la uandikishaji. Wafanyikazi wa OAF watakupigia simu kupitia"+phoneNumber +". Weka kitambulisho chako na habari zingine za uandikishaji ziko tayari";}
+}
+
+
 // Start logic flow
 global.main = function () {
     LogSessionID();
@@ -1645,6 +1684,10 @@ addInputHandler("MainMenu", function(MainMenu) {
         promptDigits("BackToMain", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if(MainMenu == 3){
+        EnrollmentNationalIdMenu();
+        promptDigits("NationalIdHandler", {submitOnHash: true, maxDigits: 8, timeout: 5});
+    }
+    else if(MainMenu == 4){
         TrainingMenuText();
         promptDigits("TrainingSelect", {submitOnHash: true, maxDigits: 1, timeout: 5})
     }
@@ -1734,6 +1777,87 @@ addInputHandler("MainMenu", function(MainMenu) {
         promptDigits("ContinueToPayment", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
 });
+
+
+addInputHandler("NationalIdHandler", function(nationalId){
+    if (nationalId== "99"){
+        ChangeLang();
+        EnrollmentNationalIdMenu();
+        promptDigits("NationalIdHandler", {submitOnHash: true, maxDigits: 8, timeout: 5});
+    }
+
+    else if(ValNationalID(nationalId)){
+        state.vars.nationaId = nationalId;
+        EnrollmentNationalIDConfirmationMenu(nationalId);
+        promptDigits("NationalIdConfirmationHandler", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+    else{
+        EnrollmentNationalIdInvalidText();
+        promptDigits("NationalIdHandler", {submitOnHash: true, maxDigits: 8, timeout: 5});
+    }
+});
+
+addInputHandler("NationalIdConfirmationHandler",function(input){
+    if (nationalId== "99"){
+        ChangeLang();
+        EnrollmentNationalIDConfirmationMenu(state.vars.nationaId);
+        promptDigits("NationalIdConfirmationHandler", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+    else if(input == 1){
+        EnrollmentPhoneNumberRequestMenu();
+        promptDigits("PhoneNumberInputHandler",{submitOnHash: true, maxDigits: 10, timeout: 5});
+    }
+    else if(input == 2){
+        EnrollmentNationalIdMenu();
+        promptDigits("NationalIdHandler", {submitOnHash: true, maxDigits: 8, timeout: 5});
+    }
+    else{
+        EnrollmentNationalIDConfirmationMenu(state.vars.nationaId);
+        promptDigits("NationalIdConfirmationHandler", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+
+});
+
+addInputHandler("PhoneNumberInputHandler",function(phoneNumber){
+    if(phoneNumber =="99"){
+        ChangeLang();
+        EnrollmentPhoneNumberRequestMenu();
+        promptDigits("PhoneNumberInputHandler",{submitOnHash: true, maxDigits: 10, timeout: 5});
+    }
+    else if(ValidPN(phoneNumber)){
+        state.vars.phoneNumber = phoneNumber;
+        EnrollmentPhoneNumberConfirmationMenu(phoneNumber);
+        promptDigits("PhoneNumberConfirmationHandler",{submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+    else{
+        EnrollmentInvalidPhoneMenu();
+        promptDigits("PhoneNumberInputHandler",{submitOnHash: true, maxDigits: 10, timeout: 5});
+    }
+});
+
+addInputHandler("PhoneNumberConfirmationHandler",function(input){
+    if(input== 99){
+        ChangeLang();
+        EnrollmentPhoneNumberConfirmationMenu(state.vars.phoneNumber);
+        promptDigits("PhoneNumberConfirmationHandler",{submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+    else if(input == 1){
+        var msg_route = project.vars.sms_push_route;
+        var phone = "0786182098";
+        project.sendMessage({ 'to_number': contact.phone_number, 'route_id': msg_route, 'content': EnrollmentRequestSMS(phone)});
+
+    }
+    else if(input == 2){
+        EnrollmentPhoneNumberRequestMenu();
+        promptDigits("PhoneNumberInputHandler",{submitOnHash: true, maxDigits: 10, timeout: 5});
+    }
+    else{
+        EnrollmentPhoneNumberConfirmationMenu(state.vars.phoneNumber);
+        promptDigits("PhoneNumberConfirmationHandler",{submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
+
+});
+
 addInputHandler("BackToMain", function(input) {
     LogSessionID();
     InteractionCounter("BackToMain");
