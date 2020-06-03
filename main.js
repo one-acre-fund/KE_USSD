@@ -959,8 +959,8 @@ var SplashMenuFailure = function (){
 };
 var MainMenuText = function (client){
     var MenuText = "";
-    if (GetLang()){MenuText ="Select Service\n1) Make a payment\n2) Check balance\n3) Trainings"}
-    else {MenuText ="Chagua Huduma\n1) Fanya malipo\n2) Kuangalia salio\n3) Mafunzo"}
+    if (GetLang()){MenuText ="Select Service\n1) Make a payment\n2) Check balance\n3) Request to enroll\n4) Trainings"}
+    else {MenuText ="Chagua Huduma\n1) Fanya malipo\n2) Kuangalia salio\n3) Omba kujiandikisha\n4) Mafunzo"}
     var JITActive = true;
     var FAWActiveCheck = true;
     //if (IsGl(client.AccountNumber)){
@@ -1798,7 +1798,7 @@ addInputHandler("NationalIdHandler", function(nationalId){
 });
 
 addInputHandler("NationalIdConfirmationHandler",function(input){
-    if (nationalId== "99"){
+    if (input == "99"){
         ChangeLang();
         EnrollmentNationalIDConfirmationMenu(state.vars.nationaId);
         promptDigits("NationalIdConfirmationHandler", {submitOnHash: true, maxDigits: 1, timeout: 5});
