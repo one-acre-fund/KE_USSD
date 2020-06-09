@@ -998,8 +998,8 @@ var MainMenuText = function (client){
 };
 
 var NonClientMenuText = function (){
-    if (GetLang()){sayText("1) Find my One Acre Fund contact\n2) Trainings\n99) Swahili")}
-    else {sayText("1) Pata Afisa wa Nyanjani wa One Acre Fund\n2) Mafunzo\n99) English")}
+    if (GetLang()){sayText("1) Request to enroll\n2) Find my One Acre Fund contact\n3) Trainings\n99) Swahili")}
+    else {sayText("1) ombi la kujiandikisha\n2) Pata Afisa wa Nyanjani wa One Acre Fund\n3) Mafunzo\n99) English")}
 }
 
 var PaymentMenuText = function (client){
@@ -1562,40 +1562,47 @@ var StaffConfrimAbsenceEmailHR = function(){
 // Enrollment Menu
 // Enrollment request Menu
 var EnrollmentNationalIdMenu = function(){
-    if (GetLang()){sayText("What is their national ID?")}
-    else {sayText("Namba yao ya kitambulisho ni gani?")}
+    if (GetLang()){sayText("What is their national ID?\n99) Swahili")}
+    else {sayText("Namba yao ya kitambulisho ni gani?\n99) English")}
 };
 
 var EnrollmentNationalIdInvalidText = function(){
-    if (GetLang()){sayText("Invalid entry.\nPlease enter a valid national id.")}
-    else {sayText("Usajili usiosahihi\nTafadhali weka nambari sahihi ya kitambulisho")}
+    if (GetLang()){sayText("Invalid entry.\nPlease enter a valid national id.\n99) Swahili")}
+    else {sayText("Usajili usiosahihi\nTafadhali weka nambari sahihi ya kitambulisho\n99) English")}
 };
 
 var EnrollmentNationalIDConfirmationMenu = function(nationalId){
-    if (GetLang()){sayText("You have entered "+nationalId+" is this really your national ID?\n1) Yes\n2) No")}
-    else {sayText("Umeingia "+nationalId+"kweli hii ndio kitambulisho chako cha kitaifa?\n1) Ndio\n2) Hapana")}
+    if (GetLang()){sayText("You have entered "+nationalId+" is this really your national ID?\n1) Yes\n2) No\n99) Swahili")}
+    else {sayText("Umeingia "+nationalId+"kweli hii ndio kitambulisho chako cha kitaifa?\n1) Ndio\n2) Hapana\n99) English")}
 };
 
 var EnrollmentPhoneNumberRequestMenu = function(){
-    if (GetLang()){sayText("What is your phone number?")}
-    else {sayText("Nambari yako ya simu ni nini?")}
+    if (GetLang()){sayText("What is your phone number?99) Swahili")}
+    else {sayText("Nambari yako ya simu ni nini?\n99) English")}
 };
 
 var EnrollmentPhoneNumberConfirmationMenu = function(phone){
-    if (GetLang()){sayText("You have entered "+phone+" is this really your phone number?\n1) Yes\n2) No")}
-    else {sayText("Umeingia "+phone+" kweli hii ndio nambari yako ya simu?\n1) Ndiyo\n 2) Hapana")}
+    if (GetLang()){sayText("You have entered "+phone+" is this really your phone number?\n1) Yes\n2) No\n99) Swahili")}
+    else {sayText("Umeingia "+phone+" kweli hii ndio nambari yako ya simu?\n1) Ndiyo\n 2) Hapana\n99) English")}
 };
 
 var EnrollmentInvalidPhoneMenu = function(phone){
-    if(GetLang()){sayText("You have entered an invalid phone number, try again")}
-    else{sayText("Umeingiza nambari ya simu isiyo sahihi, jaribu tena")}
+    if(GetLang()){sayText("You have entered an invalid phone number, try again\n99) Swahili")}
+    else{sayText("Umeingiza nambari ya simu isiyo sahihi, jaribu tena\n99) English")}
 };
 
 var EnrollmentRequestSMS = function(phoneNumber){
     if(GetLang()){return "Thank you for sending enrollment request. OAF staff will call you through"+ phoneNumber +". Keep your ID  and other enrollment information ready.";}
     else{return "Asante kwa kutuma ombi la uandikishaji. Wafanyikazi wa OAF watakupigia simu kupitia"+phoneNumber +". Weka kitambulisho chako na habari zingine za uandikishaji ziko tayari";}
 }
-
+var EnrollmentFirstNameRequestMenu = function(){
+    if(GetLang()){sayText("Enter your first name\n99) Swahili")}
+    else{sayText("Ingiza jina lako la kwanza\n99) English")}
+}
+var EnrollmentLastNameRequestMenu = function(){
+    if(GetLang()){sayText("Enter your last name\n99) Swahili")}
+    else{sayText("Ingiza jina lako la mwisho\n99) English")}
+}
 
 // Start logic flow
 global.main = function () {
@@ -1646,11 +1653,16 @@ addInputHandler("NonClientMenu", function(input) {
         NonClientMenuText();
         promptDigits("NonClientMenu", {submitOnHash: true, maxDigits: 2, timeout: 5});
     }
-    else if (input== "1"){
+    else if(input == '1'){
+        state.vars.prospectiveClient = 'true';
+        EnrollmentNationalIdMenu();
+        promptDigits("NationalIdHandler", {submitOnHash: true, maxDigits: 8, timeout: 5});
+    }
+    else if (input == "2"){
         FOLocatorRegionText();
         promptDigits("FOLocRegion", {submitOnHash: true, maxDigits: 1, timeout: 5});
     }
-    else if (input == "2"){
+    else if (input == "3"){
         TrainingMenuText();
         promptDigits("TrainingSelect", {submitOnHash: true, maxDigits: 1, timeout: 5})
     }
@@ -1842,9 +1854,15 @@ addInputHandler("PhoneNumberConfirmationHandler",function(input){
         promptDigits("PhoneNumberConfirmationHandler",{submitOnHash: true, maxDigits: 1, timeout: 5});
     }
     else if(input == 1){
+        if(state.vars.prospectiveClient  == 'true'){
+            EnrollmentFirstNameRequestMenu();
+            promptDigits("FirstNameInputHandler",{submitOnHash: true, maxDigits: 18, timeout: 5});
+        }
+        else{
         var msg_route = project.vars.sms_push_route;
         var phone = "0786182098";
-        project.sendMessage({ 'to_number': contact.phone_number, 'route_id': msg_route, 'content': EnrollmentRequestSMS(phone)});
+        project.sendMessage({ 'to_number': contact.phone_number, 'content': EnrollmentRequestSMS(phone)});
+        }
 
     }
     else if(input == 2){
@@ -1856,6 +1874,30 @@ addInputHandler("PhoneNumberConfirmationHandler",function(input){
         promptDigits("PhoneNumberConfirmationHandler",{submitOnHash: true, maxDigits: 1, timeout: 5});
     }
 
+});
+
+addInputHandler("FirstNameInputHandler",function(phoneNumber){
+    if(phoneNumber =="99"){
+        ChangeLang();
+        EnrollmentFirstNameRequestMenu();
+        promptDigits("FirstNameInputHandler",{submitOnHash: true, maxDigits: 18, timeout: 5});
+    }
+    else{
+        EnrollmentLastNameRequestMenu();
+        promptDigits("LastNameInputHandler",{submitOnHash: true, maxDigits: 18, timeout: 5});
+    }
+});
+
+addInputHandler("LastNameInputHandler",function(phoneNumber){
+    if(phoneNumber =="99"){
+        ChangeLang();
+        EnrollmentLastNameRequestMenu();
+        promptDigits("LastNameInputHandler",{submitOnHash: true, maxDigits: 18, timeout: 5});
+    }
+    else{
+        FOLocatorRegionText();
+        promptDigits("FOLocRegion", {submitOnHash: true, maxDigits: 1, timeout: 5});
+    }
 });
 
 addInputHandler("BackToMain", function(input) {
@@ -2186,8 +2228,20 @@ addInputHandler("FOLocSite", function(Site) {
 addInputHandler("FOLocConfrim", function(Confirm) {
     LogSessionID();
     InteractionCounter("FOLocConfrim");
+    var FOLocatorLabel = project.getOrCreateLabel("FO Locator");
     if (Confirm == "1"){
-        var FOLocatorLabel = project.getOrCreateLabel("FO Locator");
+        if(state.vars.prospectiveClient == 'true'){
+            var RequestEnrollmentConfirmationMSG = EnrollmentRequestSMS(state.vars.FOPN);
+            project.scheduleMessage({
+                message_type: "service", 
+                to_number: contact.phone_number, 
+                start_time_offset: 0,
+                service_id: "SVc758c8b7ad90dd27",
+                vars: {content: RequestEnrollmentConfirmationMSG}
+            });
+        }
+        else{
+        
         // Please use scheduled message function for PUSH SMSes from the USSD service to make sure that the traffic pops up in the dashboard here: https://telerivet.com/p/0c6396c9/message_stats?cumulative=false&field=count&rollup=day&groups=main.series.service%2Cmain.series.type%2Cmain.series.direction&start_date=6.4.2020&end_date=6.5.2020 This is used for budgetting
         var FarmerSMSContent = FOLocatorFarmerSMS();
         var sent_msg_farmer = project.scheduleMessage({
@@ -2198,14 +2252,15 @@ addInputHandler("FOLocConfrim", function(Confirm) {
             vars: {content: FarmerSMSContent}
         });
 
-        var FOSMSContent = FOLocatorFOSMS();
-        var sent_msg_fo = project.scheduleMessage({
-            message_type: "service", 
-            to_number: state.vars.FOPN, 
-            start_time_offset: 0,
-            service_id: "SVc758c8b7ad90dd27",
-            vars: {content: FOSMSContent}
-        });
+        // var FOSMSContent = FOLocatorFOSMS();
+        // var sent_msg_fo = project.scheduleMessage({
+        //     message_type: "service", 
+        //     to_number: state.vars.FOPN, 
+        //     start_time_offset: 0,
+        //     service_id: "SVc758c8b7ad90dd27",
+        //     vars: {content: FOSMSContent}
+        // });
+
 
         var ProspectTable = project.getOrCreateDataTable("FO_Locator_Prospects");
         var ProspectRow = ProspectTable.createRow({
@@ -2219,6 +2274,7 @@ addInputHandler("FOLocConfrim", function(Confirm) {
         ProspectRow.save();
         FOLocatorConfirmSuccessText();
         hangUp();
+    }
     }
     else{
         FOLocatorConfirmDeclineText();
